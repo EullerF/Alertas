@@ -1,6 +1,8 @@
 import React from 'react';
+import Register from '../../hooks/Register';
 
 class Form extends React.Component {
+  
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -14,6 +16,7 @@ class Form extends React.Component {
     
     this.handleInputChange  = this.handleInputChange.bind(this);
   }
+  
 
   handleInputChange(event) {
     const target = event.target;
@@ -28,18 +31,15 @@ class Form extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    alert(
-      `Arquivo selecionado - ${
-        this.fileInput.current.files[0].name
-        
+    const alertCreate = {
+      alertDescription: event.target.alert,
+      group: event.target.group,
+      dateInit: event.target.dateInit,
+      dateEnd: event.target.dateEnd
       }
-      ${
-        this.state.alert
-      }
-      ${
-        this.state.dateInit
-      }`
-    );
+      Register(alertCreate);
+      
+    alert('Seu alerta'+ alertCreate);
   }
 
   render() {

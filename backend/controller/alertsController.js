@@ -3,11 +3,10 @@ const Alert = require('../models/alerts')
 module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
-        const {
-            alert,group,dateInit,dateEnd}= req.body
+        const {alertDescription,group,dateInit,dateEnd}= req.body
 
         const alertCreate = {
-            alert,
+            alertDescription,
             group,
             dateInit,
             dateEnd
