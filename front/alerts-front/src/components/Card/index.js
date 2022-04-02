@@ -42,6 +42,7 @@ const Card = () => {
                         apiE
                         .post("https://my-json-server.typicode.com/brenner-sb/test-api/posts",{
                             message:publicacoes.alertDescription,
+                            group:publicacoes.group,
                           })
                           .then(function(response) {
                               alert('Publicações enviadas')
