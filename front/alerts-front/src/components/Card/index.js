@@ -36,15 +36,12 @@ const Card = () => {
                 }
                 )
                 if(lista!=null){
-                    const publica = post.map((publicacoes)=>{
+                    console.log(lista)
+                    const publica = lista.map((publicacoes)=>{
                         
                         apiE
                         .post("https://my-json-server.typicode.com/brenner-sb/test-api/posts",{
-                            alertDescription:publicacoes.alertDescription,
-                            group:publicacoes.group,
-                            dateInit:publicacoes.dateInit,
-                            dateEnd:publicacoes.dateEnd,
-                            frequencia:publicacoes.frequencia,
+                            message:publicacoes.alertDescription,
                           })
                           .then(function(response) {
                               alert('Publicações enviadas')
@@ -55,7 +52,7 @@ const Card = () => {
                           return(0)
                 }
                 )
-                console.log(publica)
+               // console.log(publica)
               
     }
 }
