@@ -6,27 +6,59 @@ import apiE from "../../utils/apiE";
 const Card = () => {
 
     const [alerts, setAlerts] = useState([]);
-    const [posts, setPosts] = useState([]);
+    const [post, setPost] = useState([]);
     
-    function list(){
+    function Start(){
         
-            /*api
+            api
               .get("http://localhost:5000/alerts/")
               .then(function(response) {
-                  console.log(response.data)
                   setAlerts(response.data)
               })
               .catch((err) => {
                 console.error("ops! ocorreu um erro" + err);
               });    
             
-              const listaDiaria = alerts.map((alerta)=>{
-                return(
-                    console.log('teste')
-                )}
-              )*/
+              
+              const timeElapsed = Date.now();
+              const today = new Date(timeElapsed);
+              const data = Date.parse(today)              
+
+              const lista = alerts.map((alerta)=>{
+                const dataI = Date.parse(alerta.dateInit)
+                const dataE = Date.parse(alerta.dateEnd)
+                if(dataI <= data <=dataE){
+                    console.log(data)
+                    setPost(alerta)
+                }
+                
+                return(post)
+                }
+                )
+                if(lista!=null){
+                    const publica = post.map((publicacoes)=>{
+                        
+                        apiE
+                        .post("https://my-json-server.typicode.com/brenner-sb/test-api/posts",{
+                            alertDescription:publicacoes.alertDescription,
+                            group:publicacoes.group,
+                            dateInit:publicacoes.dateInit,
+                            dateEnd:publicacoes.dateEnd,
+                            frequencia:publicacoes.frequencia,
+                          })
+                          .then(function(response) {
+                              alert('Publicações enviadas')
+                          })
+                          .catch((err) => {
+                            console.error("ops! ocorreu um erro" + err);
+                          });  
+                          return(0)
+                }
+                )
+                console.log(publica)
               
     }
+}
 
     return(
         <div className="card" style={{borderRadius:'20x'}}>
@@ -40,7 +72,7 @@ const Card = () => {
             <div className="card-footer text-muted">
             <Form></Form>
             <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
-            <button  style={{padding: '5px'}} type="button" className="btn btn-outline-primary">Startar alertas agendados para publicação</button>
+            <button  style={{padding: '5px'}} type="button" className="btn btn-outline-primary" onClick={Start}>Startar alertas agendados para publicação</button>
             </div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
             <List></List>

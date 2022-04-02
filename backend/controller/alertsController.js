@@ -5,6 +5,27 @@ module.exports = class alertsController {
     static async create(req, res) {
         const {alertDescription,group,dateInit,dateEnd,frequencia}= req.body
 
+        if(!alertDescription){
+            res.status(422).json({eror:'Insira a descrição'})
+         return
+         }
+        if(!group){
+            res.status(422).json({eror:'Insira o grupo'})
+         return
+         }
+         if(!dateInit){
+            res.status(422).json({eror:'Insira a Data Inicial'})
+         return
+         }
+         if(!dateEnd){
+            res.status(422).json({eror:'Insira a Data Final'})
+         return
+         }
+         if(!frequencia){
+            res.status(422).json({eror:'Insira a Frequencia'})
+         return
+         }
+
         const alertCreate = {
             alertDescription,
             group,

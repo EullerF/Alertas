@@ -43,11 +43,13 @@ class Form extends React.Component {
       frequencia:frequencia,
     })
     .then(function(response) {
-        alert('Cadastrado com sucesso')
+        alert('Cadastrado com Sucesso')
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
+      alert('Preencha todos os campos')
     });  
+
   }
 
   render() {
