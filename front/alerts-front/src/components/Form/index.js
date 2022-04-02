@@ -1,5 +1,6 @@
 import React from 'react';
 import Register from '../../hooks/Register';
+import api from '../../utils/api';
 
 class Form extends React.Component {
   
@@ -37,16 +38,17 @@ class Form extends React.Component {
       dateInit: event.target.dateInit,
       dateEnd: event.target.dateEnd
       }
-      Register(alertCreate);
+      console.log(event.target.alert)
       
-    alert('Seu alerta'+ alertCreate);
+      
+    alert('Seu alerta'+ event.target.alert);
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
         <label>
-          <text style={{color:'black'}}>Descrição do Alerta:</text>
+         Descrição do Alerta:
 
           <br/>
           <div style={{display: 'flex', flexDirection: 'column'}}>

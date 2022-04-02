@@ -1,5 +1,6 @@
 const express = require ('express')
 const mongoose = require('mongoose')
+var cors = require('cors')
 const app = express()
 
 app.use(
@@ -7,8 +8,8 @@ app.use(
         extended: true,
     }),
 )
-
 app.use(express.json())
+app.use(cors())
 
 const alertsRoutes = require('./routes/alertsRoutes')
 app.use('/alerts', alertsRoutes)

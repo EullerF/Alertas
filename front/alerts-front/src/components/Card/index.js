@@ -4,7 +4,7 @@ const Card = () => {
 
     return(
         <div className="card" style={{borderRadius:'20x'}}>
-            <div classNameName="card-header">
+            <div className="card-header">
                 
             </div>
             <div className="card-body">
