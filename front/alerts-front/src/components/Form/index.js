@@ -1,15 +1,17 @@
-import React from 'react';
-import Register from '../../hooks/Register';
+
+import React, { useEffect, useState } from "react";
 import api from '../../utils/api';
 
+
 class Form extends React.Component {
+
   
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fileInput = React.createRef();
     this.state = {
-      alert:'',
+      alertDescription:'',
       group:'',
       dateInit:'',
       dateEnd:'',
@@ -27,21 +29,25 @@ class Form extends React.Component {
       [name]:value
     });
   }
-
+  
 
 
   handleSubmit(event) {
+    const {alertDescription,group,dateInit,dateEnd} = this.state
     event.preventDefault();
-    const alertCreate = {
-      alertDescription: event.target.alert,
-      group: event.target.group,
-      dateInit: event.target.dateInit,
-      dateEnd: event.target.dateEnd
-      }
-      console.log(event.target.alert)
-      
-      
-    alert('Seu alerta'+ event.target.alert);
+
+    api.post("http://localhost:5000/alerts/",{
+      alertDescription:alertDescription,
+      group:group,
+      dateInit:dateInit,
+      dateEnd:dateEnd,
+    })
+    .then(function(response) {
+        console.log(response.data)
+    })
+    .catch((err) => {
+      console.error("ops! ocorreu um erro" + err);
+    });  
   }
 
   render() {
@@ -52,7 +58,7 @@ class Form extends React.Component {
 
           <br/>
           <div style={{display: 'flex', flexDirection: 'column'}}>
-              <input name="alert" type="text" value={this.state.alert} onChange={this.handleInputChange}/>
+              <input name="alertDescription" type="text" value={this.state.alert} onChange={this.handleInputChange}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', padding: '20px 20px 20px 0px'}}>
           <input type="file" ref={this.fileInput}  />
