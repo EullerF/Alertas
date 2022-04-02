@@ -5,6 +5,7 @@ const Alert = mongoose.model('Alert',{
     dateInit:Date,
     dateEnd:Date,
     group:String,
+    frequencia:String,
     file: Buffer
 })
 

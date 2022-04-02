@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import api from '../../utils/api';
 
 
@@ -15,6 +15,7 @@ class Form extends React.Component {
       group:'',
       dateInit:'',
       dateEnd:'',
+      frequencia:'',
     };
     
     this.handleInputChange  = this.handleInputChange.bind(this);
@@ -33,17 +34,16 @@ class Form extends React.Component {
 
 
   handleSubmit(event) {
-    const {alertDescription,group,dateInit,dateEnd} = this.state
-    event.preventDefault();
-
+    const {alertDescription,group,dateInit,dateEnd,frequencia} = this.state
     api.post("http://localhost:5000/alerts/",{
       alertDescription:alertDescription,
       group:group,
       dateInit:dateInit,
       dateEnd:dateEnd,
+      frequencia:frequencia,
     })
     .then(function(response) {
-        console.log(response.data)
+        alert('Cadastrado com sucesso')
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
@@ -74,6 +74,19 @@ class Form extends React.Component {
           <div style={{display: 'flex', flexDirection: 'column'}}>
               Grupo
               <input name="group" type="text" value={this.state.group} onChange={this.handleInputChange}/>
+          </div>
+          <div>
+          <label>
+          Escolha a Frequência de divulgação do alerta:
+            <br/>
+            <select name="frequencia" value={this.state.frequencia} onChange={this.handleInputChange}>
+            <option value="diariamente">Diariamente</option>
+            <option value="semanalmente">Semanalmente</option>
+            <option value="quinzenalmente">Quinzenalmente</option>
+            <option value="mensalmente">Mensalmente</option>
+            <option value="semestralmente">Semestralmente</option>
+          </select>
+        </label>
           </div>
 
         </label>

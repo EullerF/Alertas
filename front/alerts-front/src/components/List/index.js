@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import api from "../../utils/api";
 import apiE from "../../utils/apiE";
 
@@ -25,7 +25,10 @@ export default function List() {
                     <div>
                     <p style={{color:'black'}}>Descrição do Alerta:</p><p> {alerta.alertDescription}</p>
                     <p style={{color:'black'}}>Grupo: </p><p>{alerta.group}</p>
-                    <br/>
+                    <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
+                    <p style={{color:'#8FBC8F'}}>Data Inicial: </p><p>{alerta.dateInit}</p>
+                    <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{alerta.dateEnd}</p>
+                    <hr className="solid"/>
                     </div>
                 )
             }
@@ -49,7 +52,7 @@ export default function List() {
                 return(
                     <div>
                     <p style={{color:'black'}}>Descrição do Alerta Publicado:</p><p>{post.message}</p>
-                    <br/>
+                    <hr className="solid"/>
                     </div>
                 )
             }
