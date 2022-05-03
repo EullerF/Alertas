@@ -1,5 +1,5 @@
 ## Técnologias utilizadas
-O Desafio foi desenvolvido utilizando NodeJs + Mongo DB para a execução da API e ReactJs para o Front
+O Desafio foi desenvolvido utilizando NodeJs + Mongo DB para a implementação da API e utilizou-se ReactJs para o FrontEnd
 
 ## Como testar API - Backend
 Com o node instalado em sua máquina, após clonar o repositório GIT execute o seguinte comando para instalação das dependências:
