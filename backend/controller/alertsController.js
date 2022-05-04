@@ -1,9 +1,11 @@
 const Alert = require('../models/alerts')
 
+const conn = require('../db/conn')
+
 module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
-        const {alertDescription,group,dateInit,dateEnd,frequencia}= req.body
+        const {alertDescription,group,dateInit,dateEnd,frequencia}=req.body
 
         if(!alertDescription){
             res.status(422).json({eror:'Insira a descrição'})
@@ -26,33 +28,39 @@ module.exports = class alertsController {
          return
          }
 
-        const alertCreate = {
-            alertDescription,
-            group,
-            dateInit,
-            dateEnd,
-            frequencia
-            }
+        const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia) VALUES ( 
+            '${alertDescription}', 
+            '${dateInit}', 
+            '${dateEnd}', 
+            '${group}', 
+            '${frequencia}'
+            )`
 
-        try{
-                await Alert.create(alertCreate)
-                res.status(201).json({message: 'Alerta criado com sucesso'})
-     
-            } catch (error){
-                res.status(500).json({error: error})
-                }
+        conn.query(query , function(err){
+            if(err){
+                console.log(err)
+                res.status(422).json({eror:'Alerta não cadastrado'})
             }
+            console.log('Inserido no Mysql')
+            res.status(201).json({message: 'Alerta criado com sucesso'})
+        })
+    }
 
     // Listar Alertas
     static async getAll(req, res) {
-            
-            try{
-                const alerts = await Alert.find();
-                    res.status(200).json(alerts)
-                
-                } catch (error){
-                    res.status(500).json({error: error})
-                   }
-                }
 
+        const query = `SELECT * FROM alert`
+
+        conn.query(query, function (err, data) {
+        if (err) {
+         console.log(err)
+         res.status(500).json({eror:'Dados não encontrados'})
+        }
+         const alerts = data
+         console.log(alerts)
+         res.status(200).json(alerts)
+        })
     }
+    
+
+}

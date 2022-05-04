@@ -24,7 +24,7 @@ export default function List() {
                 return(
                     <div>
                     <p style={{color:'black'}}>Descrição do Alerta:</p><p> {alerta.alertDescription}</p>
-                    <p style={{color:'black'}}>Grupo: </p><p>{alerta.group}</p>
+                    <p style={{color:'black'}}>Grupo: </p><p>{alerta.grupo}</p>
                     <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
                     <p style={{color:'#8FBC8F'}}>Data Inicial: </p><p>{alerta.dateInit}</p>
                     <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{alerta.dateEnd}</p>
