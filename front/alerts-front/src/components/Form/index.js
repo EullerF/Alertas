@@ -21,6 +21,10 @@ class Form extends React.Component {
     this.handleInputChange  = this.handleInputChange.bind(this);
   }
   
+  fileChange(event){
+
+  }
+
 
   handleInputChange(event) {
     const target = event.target;
@@ -29,11 +33,14 @@ class Form extends React.Component {
     this.setState({ 
       [name]:value
     });
+
   }
   
 
 
   handleSubmit(event) {
+    event.preventDefault();
+    const file = this.fileInput.current.files[0]
     const {alertDescription,group,dateInit,dateEnd,frequencia} = this.state
     api.post("http://localhost:5000/alerts/",{
       alertDescription:alertDescription,
@@ -41,6 +48,7 @@ class Form extends React.Component {
       dateInit:dateInit,
       dateEnd:dateEnd,
       frequencia:frequencia,
+      file:file,
     })
     .then(function(response) {
         alert('Cadastrado com Sucesso')
@@ -63,7 +71,7 @@ class Form extends React.Component {
               <input name="alertDescription" type="text" value={this.state.alert} onChange={this.handleInputChange}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', padding: '20px 20px 20px 0px'}}>
-          <input type="file" ref={this.fileInput}  />
+          <input type="file" ref={this.fileInput} />
           </div>
           
           <div style={{display: 'flex', flexDirection: 'column'}}>

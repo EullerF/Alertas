@@ -5,7 +5,7 @@ const conn = require('../db/conn')
 module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
-        const {alertDescription,group,dateInit,dateEnd,frequencia}=req.body
+        const {alertDescription,group,dateInit,dateEnd,frequencia,file}=req.body
 
         if(!alertDescription){
             res.status(422).json({eror:'Insira a descrição'})
@@ -28,12 +28,13 @@ module.exports = class alertsController {
          return
          }
 
-        const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia) VALUES ( 
+        const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file) VALUES ( 
             '${alertDescription}', 
             '${dateInit}', 
             '${dateEnd}', 
             '${group}', 
-            '${frequencia}'
+            '${frequencia}',
+             '${file}'
             )`
 
         conn.query(query , function(err){
