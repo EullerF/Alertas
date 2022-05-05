@@ -28,6 +28,7 @@ export default function List() {
                     <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
                     <p style={{color:'#8FBC8F'}}>Data Inicial: </p><p>{alerta.dateInit}</p>
                     <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{alerta.dateEnd}</p>
+                    
                     <hr className="solid"/>
                     </div>
                 )

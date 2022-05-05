@@ -14,4 +14,7 @@ app.use(cors())
 const alertsRoutes = require('./routes/alertsRoutes')
 app.use('/alerts', alertsRoutes)
 
+const usersRoutes = require('./routes/usersRoutes')
+app.use('/users', usersRoutes)
+
 app.listen(5000)

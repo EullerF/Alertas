@@ -58,7 +58,6 @@ module.exports = class alertsController {
          res.status(500).json({eror:'Dados não encontrados'})
         }
          const alerts = data
-         console.log(alerts)
          res.status(200).json(alerts)
         })
     }

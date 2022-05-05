@@ -40,7 +40,7 @@ class Form extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const file = this.fileInput.current.files[0]
+    const file = this.fileInput.current.files
     const {alertDescription,group,dateInit,dateEnd,frequencia} = this.state
     api.post("http://localhost:5000/alerts/",{
       alertDescription:alertDescription,
