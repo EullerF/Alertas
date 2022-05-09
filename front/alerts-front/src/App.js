@@ -5,22 +5,6 @@ import api from "../src/utils/api";
 
 
 const App = () =>{
-  const [userLogin, setUserLogin] = useState({
-    user: '',
-    password: '',
-  })
-
-/*
-useEffect (() => {
-            api
-              .post("http://localhost:5000/users/")
-              .then(function(response) {
-                setUser(response.data)
-              })
-              .catch((err) => {
-                console.error("ops! ocorreu um erro" + err);
-              });  
-},[])*/
 
   return(
     <>
