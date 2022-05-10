@@ -3,7 +3,6 @@ const conn = require('../db/conn')
 module.exports = class usersController {
 
 
-
     static async login(req, res) {
     
         const user = req.body.user
@@ -33,6 +32,7 @@ module.exports = class usersController {
           if(user == userLogin.user && password == userLogin.password){
             res.status(200).json(userLogin)
             console.log('Teste valido')
+
          }
          else{
             res.status(422).json({message:'Usuário ou senha inválidos' })

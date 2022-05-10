@@ -9,6 +9,7 @@ const App = () =>{
   return(
     <>
     <div style={{display: 'flex', flexDirection:'column', padding:'20px'}}>
+    
     <Login></Login>
     
     <Card></Card>
