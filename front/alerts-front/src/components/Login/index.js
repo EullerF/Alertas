@@ -1,11 +1,14 @@
-import React from "react";
+/*import React from "react";
 import api from '../../utils/api';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+//import { useNavigate } from 'react-router';
+
 
 
 
 export default function Login() {
 
+  //let navigate = useNavigate();
 
   const userInit = {
     user:'',
@@ -34,6 +37,7 @@ export default function Login() {
         userAuth.profile = response.data.profile
         console.log(userAuth)
         alert('Bem vindo: '+ response.data.user)
+        //navigate('../Card')
         // Redirecionar para tela da APLICAÇÃO enviando o userAuth
     })
     .catch((err) => {
@@ -43,28 +47,7 @@ export default function Login() {
     }
 
 
-    return (
-      <form onSubmit={Login} style={{display: 'flex', flexDirection: 'column'}}>
-        <label>
-            <div className="card-body">
-                <h5 className="card-title text-center" style={{color:'blue'}}>Login</h5>
-            </div>
 
-          <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              Usuário:
-              <input name="user" type="text"  onChange={onChange} />
-          </div>
-          <br/>
-          <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              Senha:
-              <input name="password" type="password"  onChange={onChange}/>
-          </div>
-        </label>
     
-        <br />
-        <div style={{display: 'flex', flexDirection:'column', padding: '10px 80px 10px 80px'}}>
-        <button type="submit" className="btn btn-outline-primary">Login</button>
-        </div>
-      </form>
-    )
   }
+*/

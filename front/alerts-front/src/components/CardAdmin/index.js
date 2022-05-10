@@ -10,7 +10,7 @@ const root = createRoot(container);
 
 
 
-const Card = () => {
+const CardAdmin = () => {
 
 const [alerts, setAlerts] = useState([]);
 const [post, setPost] = useState([]);
@@ -92,4 +92,4 @@ useEffect (() => {
         </div>
     )
 }
-export default Card;
+export default CardAdmin;
