@@ -70,7 +70,7 @@ useEffect (() => {
 }
 
     return(
-        <div className="card" style={{borderRadius:'20x'}}>
+        <div className="card" style={{borderRadius:'20x' , padding:'20px'}}>
             <div className="card-header">
                 
             </div>

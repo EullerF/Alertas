@@ -57,7 +57,7 @@ const App = () =>{
       {userAuth.auth===false
       ?
       <div>
-      <form onSubmit={Login} style={{display: 'flex', flexDirection: 'column'}}>
+      <form onSubmit={Login} style={{display: 'flex', flexDirection: 'column', padding: '80px'}}>
         <label>
             <div className="card-body">
                 <h5 className="card-title text-center" style={{color:'blue'}}>Login</h5>
