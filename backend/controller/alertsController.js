@@ -1,11 +1,19 @@
 const Alert = require('../models/alerts')
+let fs = require("fs");
 
 const conn = require('../db/conn')
+
+//Convertendo arquivo em binário
+function base64_encode(file){
+    var bitmap = fs.readFileSync('src/temp/'+file+'');
+    return new Buffer (bitmap).toString('base64');
+  }
 
 module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
-        const {alertDescription,group,dateInit,dateEnd,frequencia,file}=req.body
+        const {alertDescription,group,dateInit,dateEnd,frequencia}=req.body
+        const file = req.body.file
 
         if(!alertDescription){
             res.status(422).json({eror:'Insira a descrição'})
@@ -28,24 +36,28 @@ module.exports = class alertsController {
          return
          }
 
-        const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file) VALUES ( 
-            '${alertDescription}', 
-            '${dateInit}', 
-            '${dateEnd}', 
-            '${group}', 
-            '${frequencia}',
-             '${file}'
-            )`
-
-        conn.query(query , function(err){
-            if(err){
-                console.log(err)
-                res.status(422).json({eror:'Alerta não cadastrado'})
-            }
-            console.log('Inserido no Mysql')
-            res.status(201).json({message: 'Alerta criado com sucesso'})
-        })
-    }
+		    	//efetuando a leitura do arquivo
+		    	let fileContent  = base64_encode(file);//Colocando o nome do arquivo que será enviado para o banco
+		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file) VALUES ( 
+                    '${alertDescription}', 
+                    '${dateInit}', 
+                    '${dateEnd}', 
+                    '${group}', 
+                    '${frequencia}',
+                    '${fileContent}'
+                    )`
+        
+                conn.query(query , function(err){
+                    if(err){
+                        console.log(err)
+                        res.status(422).json({eror:'Alerta não cadastrado'})
+                    }
+                    console.log('Inserido no Mysql')
+                    res.status(201).json({message: 'Alerta criado com sucesso'})
+                })
+		          
+    
+}
 
     // Listar Alertas
     static async getAll(req, res) {
@@ -61,6 +73,8 @@ module.exports = class alertsController {
          res.status(200).json(alerts)
         })
     }
+
+    
     
 
 }

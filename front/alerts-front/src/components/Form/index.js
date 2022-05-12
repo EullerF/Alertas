@@ -16,7 +16,7 @@ const Form = () =>{
     dateInit:'',
     dateEnd:'',
     frequencia:'',
-    file:null,
+    file:'',
   }
   const [alertSubmit, setalertSubmit] = useState(alertInit)
 
@@ -47,7 +47,7 @@ const Form = () =>{
   }
 
     return (
-      <form onSubmit={Cadastrar} style={{display: 'flex', flexDirection: 'column'}}>
+      <form onSubmit={Cadastrar} enctype='multipart/form-data'  style={{display: 'flex', flexDirection: 'column'}}>
         <label>
          Descrição do Alerta:
           <br/>
