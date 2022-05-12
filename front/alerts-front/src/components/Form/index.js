@@ -1,94 +1,79 @@
 import React from "react";
 import api from '../../utils/api';
+import { useState, useEffect } from 'react';
 
 
-class Form extends React.Component {
+const Form = () =>{
 
+  const [counter,setCounter] = useState(0);
+  useEffect(()=>{
+  console.log(counter)
+  },[counter]);
   
-  constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.fileInput = React.createRef();
-    this.state = {
-      alertDescription:'',
-      group:'',
-      dateInit:'',
-      dateEnd:'',
-      frequencia:'',
-    };
-    
-    this.handleInputChange  = this.handleInputChange.bind(this);
+  const alertInit = {
+    alertDescription:'',
+    group:'',
+    dateInit:'',
+    dateEnd:'',
+    frequencia:'',
+    file:null,
   }
-  
-  fileChange(event){
+  const [alertSubmit, setalertSubmit] = useState(alertInit)
 
+    function onChange(event){
+    const {name , value} = event.target;
+    setalertSubmit({...alertSubmit, [name]:value});
   }
 
-
-  handleInputChange(event) {
-    const target = event.target;
-    const value = target.value;
-    const name = target.name;
-    this.setState({ 
-      [name]:value
-    });
-
-  }
-  
-
-
-  handleSubmit(event) {
+  function Cadastrar(event) {
     event.preventDefault();
-    const file = this.fileInput.current.files
-    const {alertDescription,group,dateInit,dateEnd,frequencia} = this.state
+    
     api.post("http://localhost:5000/alerts/",{
-      alertDescription:alertDescription,
-      group:group,
-      dateInit:dateInit,
-      dateEnd:dateEnd,
-      frequencia:frequencia,
-      file:file,
+      alertDescription:alertSubmit.alertDescription,
+      group:alertSubmit.group,
+      dateInit:alertSubmit.dateInit,
+      dateEnd:alertSubmit.dateEnd,
+      frequencia:alertSubmit.frequencia,
+      file:alertSubmit.file,
     })
     .then(function(response) {
         alert('Cadastrado com Sucesso')
+        setCounter(counter+1);
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
       alert('Preencha todos os campos')
     });  
-
   }
 
-  render() {
     return (
-      <form onSubmit={this.handleSubmit} style={{display: 'flex', flexDirection: 'column'}}>
+      <form onSubmit={Cadastrar} style={{display: 'flex', flexDirection: 'column'}}>
         <label>
          Descrição do Alerta:
-
           <br/>
           <div style={{display: 'flex', flexDirection: 'column'}}>
-              <input name="alertDescription" type="text" value={this.state.alert} onChange={this.handleInputChange}/>
+              <input name="alertDescription" type="text"  onChange={onChange}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', padding: '20px 20px 20px 0px'}}>
-          <input type="file" ref={this.fileInput} />
+          <input name="file "type="file" onChange={onChange} />
           </div>
           
           <div style={{display: 'flex', flexDirection: 'column'}}>
             Data Inicio
-              <input name="dateInit" type="date" value={this.state.dateInit} onChange={this.handleInputChange}/>
+              <input name="dateInit" type="date"  onChange={onChange}/>
             Data Final
-              <input name="dateEnd" type="date" value={this.state.dateEnd} onChange={this.handleInputChange}/>
+              <input name="dateEnd" type="date"  onChange={onChange}/>
           </div>
 
           <div style={{display: 'flex', flexDirection: 'column'}}>
               Grupo
-              <input name="group" type="text" value={this.state.group} onChange={this.handleInputChange}/>
+              <input name="group" type="text"  onChange={onChange}/>
           </div>
           <div>
           <label>
           Escolha a Frequência de divulgação do alerta:
             <br/>
-            <select name="frequencia" value={this.state.frequencia} onChange={this.handleInputChange}>
+            <select name="frequencia"  onChange={onChange}>
             <option value="diariamente">Diariamente</option>
             <option value="semanalmente">Semanalmente</option>
             <option value="quinzenalmente">Quinzenalmente</option>
@@ -102,11 +87,10 @@ class Form extends React.Component {
     
         <br />
         <div style={{display: 'flex', flexDirection:'column', padding: '10px 80px 10px 80px'}}>
-        <button type="submit" className="btn btn-success">Cadastrar Alerta</button>
+        <button type="submit" className="btn btn-success" >Cadastrar Alerta</button>
         </div>
       </form>
     );
   }
-}
 
 export default Form;
