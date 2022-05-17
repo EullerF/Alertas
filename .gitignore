@@ -3,6 +3,7 @@
 # dependencies
 /front/alerts-front/node_modules
 /backend/node_modules
+/src/temp
 /.pnp
 .pnp.js
 
