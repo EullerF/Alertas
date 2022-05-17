@@ -5,7 +5,7 @@ const conn = require('../db/conn')
 
 //Convertendo arquivo em binário
 function base64_encode(file){
-    var bitmap = fs.readFileSync('src/temp/'+file+'');
+    var bitmap = fs.readFileSync('../src/temp'+file+'');
     return new Buffer (bitmap).toString('base64');
   }
 
@@ -13,7 +13,13 @@ module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
         const {alertDescription,group,dateInit,dateEnd,frequencia}=req.body
-        const file = req.body.file
+        
+        let image = ''
+
+        if (req.file) {
+        image = req.file.filename
+        console.log({image})
+        }
 
         if(!alertDescription){
             res.status(422).json({eror:'Insira a descrição'})
@@ -37,14 +43,14 @@ module.exports = class alertsController {
          }
 
 		    	//efetuando a leitura do arquivo
-		    	let fileContent  = base64_encode(file);//Colocando o nome do arquivo que será enviado para o banco
+		    	//let fileContent  = base64_encode(image);//Colocando o nome do arquivo que será enviado para o banco
 		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file) VALUES ( 
                     '${alertDescription}', 
                     '${dateInit}', 
                     '${dateEnd}', 
                     '${group}', 
                     '${frequencia}',
-                    '${fileContent}'
+                    '${image}'
                     )`
         
                 conn.query(query , function(err){

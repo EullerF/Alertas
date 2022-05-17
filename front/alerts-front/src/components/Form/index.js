@@ -25,16 +25,24 @@ const Form = () =>{
     setalertSubmit({...alertSubmit, [name]:value});
   }
 
-  function Cadastrar(event) {
+  function onFileChange(event) {
+    //setPreview(e.target.files[0])
+    setalertSubmit({ ...alertSubmit, [event.target.name]: event.target.files[0] })
+  }
+
+  async function Cadastrar(event) {
     event.preventDefault();
+
+    const formData = new FormData()
+
+    const fileFormData = await Object.keys(alertSubmit).forEach((key) => formData.append(key, alertSubmit[key]))
+
+    formData.append('arq', fileFormData)
     
-    api.post("http://localhost:5000/alerts/",{
-      alertDescription:alertSubmit.alertDescription,
-      group:alertSubmit.group,
-      dateInit:alertSubmit.dateInit,
-      dateEnd:alertSubmit.dateEnd,
-      frequencia:alertSubmit.frequencia,
-      file:alertSubmit.file,
+    await api.post("http://localhost:5000/alerts/",formData,{
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
     })
     .then(function(response) {
         alert('Cadastrado com Sucesso')
@@ -55,7 +63,7 @@ const Form = () =>{
               <input name="alertDescription" type="text"  onChange={onChange}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', padding: '20px 20px 20px 0px'}}>
-          <input name="file "type="file" onChange={onChange} />
+          <input name='arq' type="file" onChange={onFileChange} />
           </div>
           
           <div style={{display: 'flex', flexDirection: 'column'}}>
@@ -66,7 +74,7 @@ const Form = () =>{
           </div>
 
           <div style={{display: 'flex', flexDirection: 'column'}}>
-              Grupo
+              Link do Grupo
               <input name="group" type="text"  onChange={onChange}/>
           </div>
           <div>
