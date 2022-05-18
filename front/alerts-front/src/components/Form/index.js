@@ -7,7 +7,7 @@ const Form = () =>{
 
   const [counter,setCounter] = useState(0);
   useEffect(()=>{
-  console.log(counter)
+    console.log(alertSubmit)
   },[counter]);
   
   const alertInit = {
@@ -46,7 +46,7 @@ const Form = () =>{
     })
     .then(function(response) {
         alert('Cadastrado com Sucesso')
-        setCounter(counter+1);
+        setCounter(counter + 1);
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
@@ -68,9 +68,9 @@ const Form = () =>{
           
           <div style={{display: 'flex', flexDirection: 'column'}}>
             Data Inicio
-              <input name="dateInit" type="date"  onChange={onChange}/>
+              <input name="dateInit" type="datetime-local"  onChange={onChange}/>
             Data Final
-              <input name="dateEnd" type="date"  onChange={onChange}/>
+              <input name="dateEnd" type="datetime-local"  onChange={onChange}/>
           </div>
 
           <div style={{display: 'flex', flexDirection: 'column'}}>

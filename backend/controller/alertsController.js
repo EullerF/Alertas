@@ -9,6 +9,7 @@ function base64_encode(file){
     return new Buffer (bitmap).toString('base64');
   }
 
+
 module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
@@ -44,13 +45,14 @@ module.exports = class alertsController {
 
 		    	//efetuando a leitura do arquivo
 		    	let fileContent  = base64_encode(image);//Colocando o nome do arquivo que será enviado para o banco
-		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file) VALUES ( 
+		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file, fileName) VALUES ( 
                     '${alertDescription}', 
                     '${dateInit}', 
                     '${dateEnd}', 
                     '${group}', 
                     '${frequencia}',
-                    '${fileContent}'
+                    '${fileContent}',
+                    '${image}'
                     )`
         
                 conn.query(query , function(err){
@@ -79,8 +81,5 @@ module.exports = class alertsController {
          res.status(200).json(alerts)
         })
     }
-
     
-    
-
 }

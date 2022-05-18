@@ -11,9 +11,17 @@ const root = createRoot(container);
 
 
 const CardAdmin = () => {
+    // Adição ao próximo agendamento
+    Date.prototype.addDias = function(dias){
+        this.setDate(this.getDate() + dias)
+    };
+    Date.prototype.addMeses = function(meses){
+        this.setMonth(this.getMonth() + meses)
+    };
 
 const [alerts, setAlerts] = useState([]);
 const [post, setPost] = useState([]);
+const [lista, setLista] = useState([]);
 
 useEffect (() => {
     api
@@ -25,31 +33,66 @@ useEffect (() => {
                 console.error("ops! ocorreu um erro" + err);
               });  
 },[])
-  
-    
-    function Start(){
-        
-              
-              const timeElapsed = Date.now();
-              const today = new Date(timeElapsed);
-              const data = Date.parse(today)        
-             // console.log(data)      
 
-                const lista = alerts.map((alerta)=>{
+useEffect (() => {
+    api
+              .get("http://localhost:5000/alerts/")
+              .then(function(response) {
+                  setAlerts(response.data)
+              })
+              .catch((err) => {
+                console.error("ops! ocorreu um erro" + err);
+              });  
+
+              var date = new Date();
+              const dt = Date.parse(date) 
+              
+              setLista (alerts.map((alerta)=>{
                 const dataI = Date.parse(alerta.dateInit)
                 const dataE = Date.parse(alerta.dateEnd)
-                if(dataI <= data && data <= dataE){
-                    //console.log(alerta.alertDescription)
+                if(dataI = date && date <= dataE){  
                     setPost(alerta)
-                   // console.log(post)
                 }
                 return(post)
                 }
-                )
-               
+                ))
+                const valor = Start()
+                if(valor = 1)
+                {
+                    lista.map((publicacoes)=>{
+                        if(publicacoes.frequencia='diariamente')
+                        {
+                            publicacoes.dateInit.addDias(1)
+                        }
+                        if(publicacoes.frequencia='semanalmente')
+                        {
+                            publicacoes.dateInit.addDias(7)
+                        }
+                        if(publicacoes.frequencia='quinzenalmente')
+                        {
+                            publicacoes.dateInit.addDias(15)
+                        }
+                        if(publicacoes.frequencia='mensalmente')
+                        {
+                            publicacoes.dateInit.addMeses(1)
+                        }
+                        if(publicacoes.frequencia='semestralmente')
+                        {
+                            publicacoes.dateInit.addMeses(6)
+                        }
+                        
+                        api.patch("http://localhost:5000/alerts/"+publicacoes.id+"/",{publicacoes})
+                        // Implementar a rota que pega o ID e atualiza os dados (Nova data)
+                    })
+
+                }
+},[])
+  
+    
+    function Start(){
                 if(lista!=null){
                   console.log(lista)
-                    const publica = lista.map((publicacoes)=>{
+                    lista.map((publicacoes)=>{
 
                         apiE
                         .post("https://my-json-server.typicode.com/brenner-sb/test-api/posts",{
@@ -57,17 +100,16 @@ useEffect (() => {
                             group:publicacoes.group,
                           })
                           .then(function(response) {
-                              alert(publicacoes.alertDescription)
+                              return(1)
                           })
                           .catch((err) => {
                             console.error("ops! ocorreu um erro" + err);
-                          });  
-                          return(0)
+                          });       
                 }
                 )
               
+            }
     }
-}
 
     return(
         <div className="card" style={{borderRadius:'20x' , padding:'20px'}}>

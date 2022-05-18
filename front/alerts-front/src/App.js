@@ -54,7 +54,7 @@ const App = () =>{
 
   return(
     <>
-      {userAuth.auth===false
+      {userAuth.auth===false && counter===0
       ?
       <div>
       <form onSubmit={Login} style={{display: 'flex', flexDirection: 'column', padding: '80px'}}>

@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import api from "../../utils/api";
 import apiE from "../../utils/apiE";
+import fs from 'fs'
 
 export default function List() {
 
+
     const [alerts, setAlerts] = useState([]);
     const [posts, setPosts] = useState([]);
+    const [fileDecode, setfileDecode] = useState();
     
     function list(){
         
@@ -21,10 +24,11 @@ export default function List() {
               
     }
             const lista = alerts.map((alerta)=>{
+
                 return(
                     <div>
                     <p style={{color:'black'}}>Descrição do Alerta:</p><p> {alerta.alertDescription}</p>
-                    <p style={{color:'black'}}>Grupo: </p><p>{alerta.grupo}</p>
+                    <p style={{color:'black'}}>Link do Grupo: </p><p>{alerta.grupo}</p>
                     <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
                     <p style={{color:'#8FBC8F'}}>Data Inicial: </p><p>{alerta.dateInit}</p>
                     <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{alerta.dateEnd}</p>
