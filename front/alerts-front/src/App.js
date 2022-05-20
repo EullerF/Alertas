@@ -64,13 +64,13 @@ const App = () =>{
             </div>
 
           <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              Usuário:
-              <input name="user" type="text"  onChange={onChange} />
+              
+              <input className="form-control" placeholder="Usuário" name="user" type="text"  onChange={onChange} />
           </div>
           <br/>
           <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              Senha:
-              <input name="password" type="password"  onChange={onChange}/>
+              
+              <input className="form-control" placeholder="Senha" name="password" type="password"  onChange={onChange}/>
           </div>
         </label>
         <br />

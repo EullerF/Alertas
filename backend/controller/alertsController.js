@@ -10,7 +10,7 @@ function base64_encode(file){
   }
 
  // Adição ao próximo agendamento
- Date.prototype.addDias = function(dias){
+Date.prototype.addDias = function(dias){
     this.setDate(this.getDate() + dias)
 };
 Date.prototype.addMeses = function(meses){
@@ -109,46 +109,45 @@ module.exports = class alertsController {
         alerts.forEach(doc => {   
             const dataI = Date.parse(doc.dateInit)
             const dataE = Date.parse(doc.dateEnd)
-                if(dataI <= dt && dt <= dataE){ 
+                if(dataI == dt && dt <= dataE){ 
                     alertas.push(doc)
             }
         })
         if(alertas.length!=0)
         {
-            //console.log(alertas)
             alertas.forEach(publicacoes => {
-                        if(publicacoes.frequencia='diariamente')
+                        if(publicacoes.frequencia=='diariamente')
                         {
                             publicacoes.dateInit.addDias(1)
                         }
-                        if(publicacoes.frequencia='semanalmente')
+                        if(publicacoes.frequencia=='semanalmente')
                         {
                             publicacoes.dateInit.addDias(7)
                         }
-                        if(publicacoes.frequencia='quinzenalmente')
+                        if(publicacoes.frequencia=='quinzenalmente')
                         {
                             publicacoes.dateInit.addDias(15)
                         }
-                        if(publicacoes.frequencia='mensalmente')
+                        if(publicacoes.frequencia=='mensalmente')
                         {
                             publicacoes.dateInit.addMeses(1)
                         }
-                        if(publicacoes.frequencia='semestralmente')
+                        if(publicacoes.frequencia=='semestralmente')
                         {
                             publicacoes.dateInit.addMeses(6)
-                            //console.log('TESTE')
-                            //console.log(publicacoes.dateInit)
                         }
-                      const confirma = Update(publicacoes)  
-                      console.log('confirma')
-                      console.log(confirma)
+                      Update(publicacoes)  
+                      
             })
 
         }
-    res.status(200).json(alertas)
+                  // Publicações a serem enviadas para o WorkChat
+                  res.status(200).json(alertas)
     })
     
     function Update(doc){
+        
+        
         console.log('DATA')
         console.log(doc.dateInit)
         const query = `UPDATE alert SET dateInit = '${doc.dateInit}' WHERE alert.id = '${doc.id}'`
@@ -156,9 +155,7 @@ module.exports = class alertsController {
         conn.query(query, function (err, data) {
             if (err) {
              console.log(err)
-             res.status(500).json({eror:'Dados não encontrados'})
             }
-             return(1)
             })
     }
     

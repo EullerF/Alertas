@@ -14,7 +14,7 @@ const CardAdmin = () => {
    
 
 const [alerts, setAlerts] = useState([]);
-const [post, setPost] = useState([{}]);
+const [post, setPost] = useState([]);
 const [counter, setCounter] = useState(0);
 useEffect (() => {
     api
@@ -31,42 +31,25 @@ useEffect (() => {
     api
               .patch("http://localhost:5000/alerts/")
               .then(function(response) {
-                  setAlerts(response.data)
+                  // Publicações a serem enviadas para o WorkChat
+                  setPost(response.data)
+                  // Chamada da Api do Work
               })
               .catch((err) => {
                 console.error("ops! ocorreu um erro" + err);
               });                   
 },[counter])
-  
-    
-    function Start(){
-        setCounter(counter + 1)
-               
-                  // VER API REAL DO WORKCHAT
-                  /*console.log(lista)
-                    lista.map((publicacoes)=>{
 
-                        apiE
-                        .post("https://my-json-server.typicode.com/brenner-sb/test-api/posts",{
-                            message:publicacoes.alertDescription,
-                            group:publicacoes.group,
-                          })
-                          .then(function(response) {
-                              return(1)
-                          })
-                          .catch((err) => {
-                            console.error("ops! ocorreu um erro" + err);
-                          });       
-                }
-                )*/
-              
-            
-    }
+setTimeout(()=>{
+    console.log('Tempo')
+    setCounter(counter + 1);
+    
+  },1000)
+  
 
     return(
-        <div className="card" style={{borderRadius:'20x' , padding:'20px'}}>
+        <div className="card" style={{borderRadius:'10px' }}>
             <div className="card-header">
-                
             </div>
             <div className="card-body">
                 <h5 className="card-title text-center">Alerts</h5>
@@ -74,9 +57,6 @@ useEffect (() => {
 
             <div className="card-footer text-muted">
             <Form></Form>
-            <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
-            <button  style={{padding: '5px'}} type="button" className="btn btn-outline-primary" onClick={Start}>Startar alertas agendados para publicação</button>
-            </div>
             <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
             <List></List>
             </div>

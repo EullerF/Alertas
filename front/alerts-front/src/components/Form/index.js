@@ -46,7 +46,14 @@ const Form = () =>{
     })
     .then(function(response) {
         alert('Cadastrado com Sucesso')
-        setCounter(counter + 1);
+        setalertSubmit({
+          alertDescription:'',
+          group:'',
+          dateInit:'',
+          dateEnd:'',
+          frequencia:'',
+          file:'', 
+        })
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
@@ -60,28 +67,26 @@ const Form = () =>{
          Descrição do Alerta:
           <br/>
           <div style={{display: 'flex', flexDirection: 'column'}}>
-              <input name="alertDescription" type="text"  onChange={onChange}/>
+              <input className="form-control"  name="alertDescription" type="text" value={alertSubmit.alertDescription} onChange={onChange}/>
           </div>
-          <div style={{display: 'flex', flexDirection: 'column', padding: '20px 20px 20px 0px'}}>
-          <input name='arq' type="file" onChange={onFileChange} />
+          <div style={{display: 'flex', flexDirection: 'column', padding: '20px 0px 20px 0px'}}>
+          <input className="form-control" name='arq' type="file"  onChange={onFileChange} />
           </div>
-          
           <div style={{display: 'flex', flexDirection: 'column'}}>
-            Data Inicio
-              <input name="dateInit" type="datetime-local"  onChange={onChange}/>
-            Data Final
-              <input name="dateEnd" type="datetime-local"  onChange={onChange}/>
+            Data Inicio:
+              <input className="btn btn-outline-secondary" name="dateInit" type="datetime-local" value={alertSubmit.dateInit} onChange={onChange}/>
+            Data Final:
+              <input className="btn btn-outline-secondary" name="dateEnd" type="datetime-local" value={alertSubmit.dateEnd} onChange={onChange}/>
           </div>
-
-          <div style={{display: 'flex', flexDirection: 'column'}}>
-              Link do Grupo
-              <input name="group" type="text"  onChange={onChange}/>
+          <div style={{display: 'flex', flexDirection: 'column', padding: '20px 0px 20px 0px'}}>
+              Link do Grupo:
+              <input className="form-control" name="group" type="text" value={alertSubmit.group} onChange={onChange}/>
           </div>
           <div>
           <label>
           Escolha a Frequência de divulgação do alerta:
             <br/>
-            <select name="frequencia"  onChange={onChange}>
+            <select className="btn btn-outline-secondary dropdown-toggle" name="frequencia" value={alertSubmit.frequencia} onChange={onChange}>
             <option value="diariamente">Diariamente</option>
             <option value="semanalmente">Semanalmente</option>
             <option value="quinzenalmente">Quinzenalmente</option>
@@ -95,7 +100,7 @@ const Form = () =>{
     
         <br />
         <div style={{display: 'flex', flexDirection:'column', padding: '10px 80px 10px 80px'}}>
-        <button type="submit" className="btn btn-success" >Cadastrar Alerta</button>
+        <button type="submit" className="btn btn-success">Cadastrar Alerta</button>
         </div>
       </form>
     );
