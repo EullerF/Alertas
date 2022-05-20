@@ -149,8 +149,12 @@ module.exports = class alertsController {
         
         
         console.log('DATA')
-        console.log(doc.dateInit)
-        const query = `UPDATE alert SET dateInit = '${doc.dateInit}' WHERE alert.id = '${doc.id}'`
+        console.debug(doc.dateInit)
+        
+        const cast = new Date(doc.dateInit)
+        const mySQLDateString = cast.toJSON().slice(0, 19).replace('T', ' ');
+        console.log(mySQLDateString)
+        const query = `UPDATE alert SET dateInit = '${mySQLDateString}' WHERE alert.id = '${doc.id}'`
 
         conn.query(query, function (err, data) {
             if (err) {
