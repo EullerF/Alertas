@@ -101,14 +101,14 @@ module.exports = class alertsController {
          res.status(500).json({eror:'Dados não encontrados'})
         }
          alerts = data
-         //console.log(alerts)
          // Validando Start de Mensagens
         var date = new Date();
         const dt = Date.parse(date) 
-       
+      
         alerts.forEach(doc => {   
             const dataI = Date.parse(doc.dateInit)
             const dataE = Date.parse(doc.dateEnd)
+            
                 if(dataI == dt && dt <= dataE){ 
                     alertas.push(doc)
             }
@@ -116,6 +116,8 @@ module.exports = class alertsController {
         if(alertas.length!=0)
         {
             alertas.forEach(publicacoes => {
+                console.log('DATA ANTES')
+                console.log(publicacoes.dateInit)
                         if(publicacoes.frequencia=='diariamente')
                         {
                             publicacoes.dateInit.addDias(1)
@@ -152,8 +154,9 @@ module.exports = class alertsController {
         console.debug(doc.dateInit)
         
         const cast = new Date(doc.dateInit)
+
         const mySQLDateString = cast.toJSON().slice(0, 19).replace('T', ' ');
-        console.log(mySQLDateString)
+        //console.log(mySQLDateString)
         const query = `UPDATE alert SET dateInit = '${mySQLDateString}' WHERE alert.id = '${doc.id}'`
 
         conn.query(query, function (err, data) {
