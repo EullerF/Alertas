@@ -16,6 +16,10 @@ Date.prototype.addDias = function(dias){
 Date.prototype.addMeses = function(meses){
     this.setMonth(this.getMonth() + meses)
 };
+// Ajustando a Hora
+Date.prototype.addHoras = function(horas){
+    this.setHours(this.getHours() - horas)
+};
 
 module.exports = class alertsController {
     // Cadastrar Alerta
@@ -116,8 +120,6 @@ module.exports = class alertsController {
         if(alertas.length!=0)
         {
             alertas.forEach(publicacoes => {
-                console.log('DATA ANTES')
-                console.log(publicacoes.dateInit)
                         if(publicacoes.frequencia=='diariamente')
                         {
                             publicacoes.dateInit.addDias(1)
@@ -138,6 +140,8 @@ module.exports = class alertsController {
                         {
                             publicacoes.dateInit.addMeses(6)
                         }
+                      var currentTimeZoneOffsetInHours = publicacoes.dateInit.getTimezoneOffset() / 60;
+                      publicacoes.dateInit.addHoras(currentTimeZoneOffsetInHours)
                       Update(publicacoes)  
                       
             })
@@ -148,15 +152,14 @@ module.exports = class alertsController {
     })
     
     function Update(doc){
-        
-        
+           
         console.log('DATA')
         console.debug(doc.dateInit)
         
         const cast = new Date(doc.dateInit)
-
+        
         const mySQLDateString = cast.toJSON().slice(0, 19).replace('T', ' ');
-        //console.log(mySQLDateString)
+        console.log(mySQLDateString)
         const query = `UPDATE alert SET dateInit = '${mySQLDateString}' WHERE alert.id = '${doc.id}'`
 
         conn.query(query, function (err, data) {
