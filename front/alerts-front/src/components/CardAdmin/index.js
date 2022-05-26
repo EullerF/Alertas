@@ -4,6 +4,7 @@ import Form from "../Form";
 import List from "../List";
 import api from "../../utils/api";
 import apiE from "../../utils/apiE";
+import apiWork from "../../utils/apiWork";
 import { createRoot } from 'react-dom/client';
 const container = document.getElementById('root');
 const root = createRoot(container);
@@ -31,13 +32,35 @@ useEffect (() => {
     api
               .patch("http://localhost:5000/alerts/")
               .then(function(response) {
+                
                   // Publicações a serem enviadas para o WorkChat
-                  setPost(response.data)
-                  // Chamada da Api do Work
+                    console.log('NÃO DEVIA'+response.data)
+                    apiWork
+                    .post("",{
+                          "recipient": {
+                              "id": response.data.grupo
+                          },
+                          "message": {
+                              "text": response.data.alertDescription
+                          }
+                      
+                    }).then(function(resp){
+                        console.log(resp.message_id)
+                        
+                    })
+                    .catch((erro)=>{
+                      console.log('Sem agendamentos');
+                    });
+                  
+                  
               })
-              .catch((err) => {
-                console.error("ops! ocorreu um erro" + err);
-              });                   
+              .catch((error) => {
+                console.error("ops! ocorreu um erro" + error);
+              });   
+              
+              
+ 
+
 },[counter])
 
 setTimeout(()=>{

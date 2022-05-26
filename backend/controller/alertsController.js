@@ -102,7 +102,7 @@ module.exports = class alertsController {
         conn.query(query, function (err, data) {
         if (err) {
          console.log(err)
-         res.status(500).json({eror:'Dados não encontrados'})
+         res.status(500).json({error:'Dados não encontrados'})
         }
          alerts = data
          // Validando Start de Mensagens
@@ -145,10 +145,12 @@ module.exports = class alertsController {
                       Update(publicacoes)  
                       
             })
-
         }
-                  // Publicações a serem enviadas para o WorkChat
-                  res.status(200).json(alertas)
+        else{
+            res.status(110).json({message:'Sem agendamentos',validar:false})
+            return
+        }
+                  
     })
     
     function Update(doc){
@@ -165,8 +167,10 @@ module.exports = class alertsController {
         conn.query(query, function (err, data) {
             if (err) {
              console.log(err)
+             res.status(500).json({error:'Novo agendamento não realizado'})
             }
             })
+            res.status(200).json(doc)
     }
     
 }

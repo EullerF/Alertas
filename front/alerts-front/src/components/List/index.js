@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import api from "../../utils/api";
 import apiE from "../../utils/apiE";
+import apiWork from "../../utils/apiWork";
 import fs from 'fs'
 
 export default function List() {
@@ -50,7 +51,24 @@ export default function List() {
               })
               .catch((err) => {
                 console.error("ops! ocorreu um erro" + err);
-              });    
+              });   
+
+              /*apiWork
+              .post("https://graph.facebook.com/v11.0/me/messages?access_token=",{
+                    "recipient": {
+                        "id": "100053415167070"
+                    },
+                    "message": {
+                        "text": "Teste"
+                    }
+                
+              }).then(function(response){
+                  console.log(response.message_id)
+                  alert('Enviado: '+ response.message_id)
+              })
+              .catch((erro)=>{
+                console.error("ops! ocorreu um erro" + erro);
+              });*/     
               
     }
             const listaPosts = posts.map((post)=>{
