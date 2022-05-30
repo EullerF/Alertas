@@ -3,19 +3,16 @@ import { useState, useEffect } from 'react';
 import Form from "../Form";
 import List from "../List";
 import api from "../../utils/api";
-import apiE from "../../utils/apiE";
 import apiWork from "../../utils/apiWork";
-import { createRoot } from 'react-dom/client';
-const container = document.getElementById('root');
-const root = createRoot(container);
-
 
 
 const CardAdmin = () => {
    
-
+const [envia, SetEnvia] = useState({
+    alerta:'',
+    status:false
+})
 const [alerts, setAlerts] = useState([]);
-const [post, setPost] = useState([]);
 const [counter, setCounter] = useState(0);
 useEffect (() => {
     api
@@ -34,39 +31,45 @@ useEffect (() => {
               .then(function(response) {
                 
                   // Publicações a serem enviadas para o WorkChat
-                    console.log('NÃO DEVIA'+response.data)
+                    
                     apiWork
-                    .post("",{
+                    .post("https://graph.facebook.com/v11.0/me/messages?access_token=",{
                           "recipient": {
-                              "id": response.data.grupo
+                              "thread_key": response.data.grupo
                           },
                           "message": {
-                              "text": response.data.alertDescription
+                              "text": response.data.alertDescription,      
                           }
                       
                     }).then(function(resp){
                         console.log(resp.message_id)
-                        
+                        SetEnvia({
+                            alerta:response.data.alertDescription,
+                            status: true
+                        })
                     })
                     .catch((erro)=>{
-                      console.log('Sem agendamentos');
+                      console.log('Erro ao enviar para o Workchat');
+                      console.log(erro)
+                      
                     });
                   
                   
               })
               .catch((error) => {
-                console.error("ops! ocorreu um erro" + error);
+                console.log('Nada agendado');
+                SetEnvia({
+                    alerta:'',
+                    status: false
+                })
               });   
               
-              
- 
 
 },[counter])
 
 setTimeout(()=>{
-    console.log('Tempo')
+    console.log(counter)
     setCounter(counter + 1);
-    
   },500)
   
 
@@ -76,6 +79,16 @@ setTimeout(()=>{
             </div>
             <div className="card-body">
                 <h5 className="card-title text-center">Alerts</h5>
+                {envia.status===true
+                ?
+                <div>
+                    <p className="p-3 mb-2 bg-info text-white" style={{borderRadius:'10px'}}>Alerta Enviado: {envia.alerta}</p>
+                </div>
+                :
+                <div>
+                    
+                </div>
+                }
             </div>
 
             <div className="card-footer text-muted">

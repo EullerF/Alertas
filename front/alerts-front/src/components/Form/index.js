@@ -79,8 +79,8 @@ const Form = () =>{
               <input className="btn btn-outline-secondary" name="dateEnd" type="datetime-local" value={alertSubmit.dateEnd} onChange={onChange}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', padding: '20px 0px 20px 0px'}}>
-              Link do Grupo:
-              <input className="form-control" name="group" type="text" value={alertSubmit.group} onChange={onChange}/>
+              Número de referencia do grupo:
+              <input className="form-control" name="group" type="number" value={alertSubmit.group} onChange={onChange}/>
           </div>
           <div>
           <label>

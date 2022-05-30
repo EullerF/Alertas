@@ -60,7 +60,7 @@ module.exports = class alertsController {
                     '${alertDescription}', 
                     '${dateInit}', 
                     '${dateEnd}', 
-                    '${group}', 
+                    't_${group}', 
                     '${frequencia}',
                     '${fileContent}',
                     '${image}'
@@ -147,7 +147,7 @@ module.exports = class alertsController {
             })
         }
         else{
-            res.status(110).json({message:'Sem agendamentos',validar:false})
+            res.status(110).json({message:'Sem agendamentos'})
             return
         }
                   
