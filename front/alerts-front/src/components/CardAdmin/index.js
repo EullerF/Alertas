@@ -4,14 +4,17 @@ import Form from "../Form";
 import List from "../List";
 import api from "../../utils/api";
 import apiWork from "../../utils/apiWork";
+require('dotenv').config()
 
+const TOKEN_WORK = process.env.TOKEN_WORK
 
 const CardAdmin = () => {
    
-const [envia, SetEnvia] = useState({
+const [envia, setEnvia] = useState({
     alerta:'',
     status:false
 })
+
 const [alerts, setAlerts] = useState([]);
 const [counter, setCounter] = useState(0);
 useEffect (() => {
@@ -30,12 +33,10 @@ useEffect (() => {
               .patch("http://localhost:5000/alerts/")
               .then(function(response) {
                 
-                  // Publicações a serem enviadas para o WorkChat
-                    
-                    apiWork
+                apiWork
                     .post("https://graph.facebook.com/v11.0/me/messages?access_token=",{
                           "recipient": {
-                              "thread_key": response.data.grupo
+                              "id": response.data.grupo
                           },
                           "message": {
                               "text": response.data.alertDescription,      
@@ -43,7 +44,7 @@ useEffect (() => {
                       
                     }).then(function(resp){
                         console.log(resp.message_id)
-                        SetEnvia({
+                        setEnvia({
                             alerta:response.data.alertDescription,
                             status: true
                         })
@@ -55,22 +56,22 @@ useEffect (() => {
                     });
                   
                   
+                  
               })
               .catch((error) => {
                 console.log('Nada agendado');
-                SetEnvia({
+                setEnvia({
                     alerta:'',
                     status: false
                 })
               });   
               
-
 },[counter])
 
 setTimeout(()=>{
     console.log(counter)
     setCounter(counter + 1);
-  },500)
+  },15000)
   
 
     return(
@@ -82,7 +83,7 @@ setTimeout(()=>{
                 {envia.status===true
                 ?
                 <div>
-                    <p className="p-3 mb-2 bg-info text-white" style={{borderRadius:'10px'}}>Alerta Enviado: {envia.alerta}</p>
+                    <p className="p-3 mb-2 bg-info text-white" style={{borderRadius:'10px'}}>Enviando: {envia.alerta}</p>
                 </div>
                 :
                 <div>

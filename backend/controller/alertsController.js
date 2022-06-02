@@ -1,5 +1,6 @@
 const Alert = require('../models/alerts')
 let fs = require("fs");
+const axios = require('axios');
 
 const conn = require('../db/conn')
 
@@ -7,6 +8,15 @@ const conn = require('../db/conn')
 function base64_encode(file){
     var bitmap = fs.readFileSync('../src/temp/'+file);
     return new Buffer (bitmap).toString('base64');
+  }
+
+function base64_decode(base64str,fileName){
+    var bitmap = new Buffer (base64str, 'base64');
+    fs.writeFileSync('../src/temp/'+fileName,bitmap, 'binary', function (err){
+      if(err){
+        console.log('Conversao com erro');
+      }
+    } );
   }
 
  // Adição ao próximo agendamento
@@ -34,23 +44,30 @@ module.exports = class alertsController {
         }
 
         if(!alertDescription){
-            res.status(422).json({eror:'Insira a descrição'})
+            res.status(422).json({message:'Insira a descrição'})
          return
          }
         if(!group){
-            res.status(422).json({eror:'Insira o grupo'})
+            res.status(422).json({message:'Insira o grupo'})
          return
          }
          if(!dateInit){
-            res.status(422).json({eror:'Insira a Data Inicial'})
+            res.status(422).json({message:'Insira a Data Inicial'})
          return
          }
+        var date = new Date();
+        const dt = Date.parse(date)
+        const dataI = Date.parse(dateInit)
+        if(dataI < dt){
+            res.status(422).json({message:'Insira uma Data Inicial válida'})
+         return
+        }
          if(!dateEnd){
-            res.status(422).json({eror:'Insira a Data Final'})
+            res.status(422).json({message:'Insira a Data Final'})
          return
          }
          if(!frequencia){
-            res.status(422).json({eror:'Insira a Frequencia'})
+            res.status(422).json({message:'Insira a Frequencia'})
          return
          }
 
@@ -69,7 +86,7 @@ module.exports = class alertsController {
                 conn.query(query , function(err){
                     if(err){
                         console.log(err)
-                        res.status(422).json({eror:'Alerta não cadastrado'})
+                        res.status(422).json({error:'Alerta não cadastrado, preencha todos os campos'})
                     }
                     console.log('Inserido no Mysql')
                     res.status(201).json({message: 'Alerta criado com sucesso'})
@@ -86,7 +103,7 @@ module.exports = class alertsController {
         conn.query(query, function (err, data) {
         if (err) {
          console.log(err)
-         res.status(500).json({eror:'Dados não encontrados'})
+         res.status(500).json({error:'Dados não encontrados'})
         }
          const alerts = data
          res.status(200).json(alerts)
@@ -113,7 +130,7 @@ module.exports = class alertsController {
             const dataI = Date.parse(doc.dateInit)
             const dataE = Date.parse(doc.dateEnd)
             
-                if(dataI == dt && dt <= dataE){ 
+                if(dataI <= dt && dt <= dataE){ 
                     alertas.push(doc)
             }
         })
@@ -170,7 +187,32 @@ module.exports = class alertsController {
              res.status(500).json({error:'Novo agendamento não realizado'})
             }
             })
+
             res.status(200).json(doc)
+            const FormData = require('form-data');
+            const fs = require('fs');
+            let data = new FormData();
+            data.append('recipient', '{"thread_key":'+doc.grupo+'}');
+            data.append('message', '{"attachment":{"type":"image", "payload":{"is_reusable":true}}}');
+            data.append('filedata', fs.createReadStream('../src/temp/'+doc.fileName));
+            
+            let config = {
+              method: 'post',
+              url: 'https://graph.facebook.com/v11.0/me/messages?access_token=',
+              headers: { 
+                ...data.getHeaders()
+              },
+              data : data
+            };
+            
+            axios(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
     }
     
 }

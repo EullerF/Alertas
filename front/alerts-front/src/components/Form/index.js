@@ -35,7 +35,7 @@ const Form = () =>{
 
     const formData = new FormData()
 
-    const fileFormData = await Object.keys(alertSubmit).forEach((key) => formData.append(key, alertSubmit[key]))
+    const fileFormData =  Object.keys(alertSubmit).forEach((key) => formData.append(key, alertSubmit[key]))
 
     formData.append('arq', fileFormData)
     
@@ -55,9 +55,9 @@ const Form = () =>{
           file:'', 
         })
     })
-    .catch((err) => {
-      console.error("ops! ocorreu um erro" + err);
-      alert('Preencha todos os campos')
+    .catch((err) => { 
+      console.log(err.response.data);
+      alert('Atenção: '+err.response.data.message)
     });  
   }
 
