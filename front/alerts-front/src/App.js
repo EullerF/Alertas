@@ -39,8 +39,6 @@ const App = () =>{
         userAuth.profile = response.data.profile
         userAuth.auth = true
         console.log(userAuth)
-        
-        alert('Bem vindo: '+ response.data.user)
         setCounter(counter + 1)
 
     })

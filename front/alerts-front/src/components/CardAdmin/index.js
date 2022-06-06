@@ -34,9 +34,9 @@ useEffect (() => {
               .then(function(response) {
                 
                 apiWork
-                    .post("https://graph.facebook.com/v11.0/me/messages?access_token=",{
+                    .post('https://graph.facebook.com/v11.0/me/messages?access_token='+TOKEN_WORK,{
                           "recipient": {
-                              "id": response.data.grupo
+                              "thread_key": response.data.grupo
                           },
                           "message": {
                               "text": response.data.alertDescription,      

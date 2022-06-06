@@ -188,11 +188,10 @@ module.exports = class alertsController {
             }
             })
 
-            res.status(200).json(doc)
             const FormData = require('form-data');
             const fs = require('fs');
             let data = new FormData();
-            data.append('recipient', '{"thread_key":'+doc.grupo+'}');
+            data.append('recipient', '{"thread_key":"'+doc.grupo+'"}');
             data.append('message', '{"attachment":{"type":"image", "payload":{"is_reusable":true}}}');
             data.append('filedata', fs.createReadStream('../src/temp/'+doc.fileName));
             
@@ -208,6 +207,7 @@ module.exports = class alertsController {
             axios(config)
             .then((response) => {
               console.log(JSON.stringify(response.data));
+              res.status(200).json(doc)
             })
             .catch((error) => {
               console.log(error);
@@ -216,5 +216,24 @@ module.exports = class alertsController {
     }
     
 }
+
+    // Deletar único alerta
+    static async delete(req, res) {
+        const id = req.params.id
+        console.log(id)      
+        const query = `DELETE FROM alert WHERE alert.id ='${id}'`
+
+        conn.query(query, function (err, data) {
+        if (err) {
+         console.log(err)
+         res.status(500).json({error:'Dados não encontrados'})
+         return
+        }
+         const alerts = data
+         res.status(200).json({delete:true})
+         console.log('DELETADO')
+         return
+        })
+    }
     
 }
