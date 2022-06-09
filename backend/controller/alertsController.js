@@ -42,11 +42,10 @@ module.exports = class alertsController {
         image = req.file.filename
         console.log({image})
         }
-
-        if(!alertDescription){
-            res.status(422).json({message:'Insira a descrição'})
+        if(!req.file && !alertDescription){
+            res.status(422).json({message:'Adicione pelo menos um arquivo ou uma mensagem'})
          return
-         }
+        }
         if(!group){
             res.status(422).json({message:'Insira o grupo'})
          return
@@ -72,12 +71,35 @@ module.exports = class alertsController {
          }
 
 		    	//efetuando a leitura do arquivo
-		    	let fileContent  = base64_encode(image);//Colocando o nome do arquivo que será enviado para o banco
+                if(image!=''){
+                    let fileContent  = base64_encode(image);//Colocando o nome do arquivo que será enviado para o banco
+		    	
+                if(!alertDescription){
+                    const query = `INSERT INTO alert (dateInit, dateEnd, grupo, frequencia, file, fileName) VALUES ( 
+                        '${dateInit}', 
+                        '${dateEnd}', 
+                        '${group}', 
+                        '${frequencia}',
+                        '${fileContent}',
+                        '${image}'
+                        )`
+            
+                    conn.query(query , function(err){
+                        if(err){
+                            console.log(err)
+                            res.status(422).json({error:'Alerta não cadastrado, preencha todos os campos'})
+                        }
+                        console.log('Inserido no Mysql')
+                        res.status(201).json({message: 'Alerta criado com sucesso'})
+                        return
+                    })
+                }
+                else if(alertDescription){
 		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file, fileName) VALUES ( 
                     '${alertDescription}', 
                     '${dateInit}', 
                     '${dateEnd}', 
-                    't_${group}', 
+                    '${group}', 
                     '${frequencia}',
                     '${fileContent}',
                     '${image}'
@@ -90,7 +112,29 @@ module.exports = class alertsController {
                     }
                     console.log('Inserido no Mysql')
                     res.status(201).json({message: 'Alerta criado com sucesso'})
+                    return
                 })
+            }
+            }
+            else if (alertDescription){
+                const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia) VALUES ( 
+                    '${alertDescription}', 
+                    '${dateInit}', 
+                    '${dateEnd}', 
+                    '${group}', 
+                    '${frequencia}'
+                    )`
+        
+                conn.query(query , function(err){
+                    if(err){
+                        console.log(err)
+                        res.status(422).json({error:'Alerta não cadastrado, preencha todos os campos'})
+                    }
+                    console.log('Inserido no Mysql')
+                    res.status(201).json({message: 'Alerta criado com sucesso'})
+                    return
+                })
+            }
 		          
     
 }
@@ -185,9 +229,14 @@ module.exports = class alertsController {
             if (err) {
              console.log(err)
              res.status(500).json({error:'Novo agendamento não realizado'})
+             return
             }
             })
-
+            if(doc.fileName==''){
+                res.status(200).json(doc)
+                return
+            }
+            else{
             const FormData = require('form-data');
             const fs = require('fs');
             let data = new FormData();
@@ -207,11 +256,19 @@ module.exports = class alertsController {
             axios(config)
             .then((response) => {
               console.log(JSON.stringify(response.data));
+              if(doc.alertDescription=='')
+              {
+                res.status(200).json({message:'Alerta sem descrição'})
+              }
+              else{
               res.status(200).json(doc)
+              return
+              }
             })
             .catch((error) => {
               console.log(error);
             });
+        }
 
     }
     

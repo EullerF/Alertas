@@ -26,7 +26,6 @@ const Form = () =>{
   }
 
   function onFileChange(event) {
-    //setPreview(e.target.files[0])
     setalertSubmit({ ...alertSubmit, [event.target.name]: event.target.files[0] })
   }
 
@@ -52,11 +51,12 @@ const Form = () =>{
           dateInit:'',
           dateEnd:'',
           frequencia:'',
-          file:'', 
+          file:null, 
         })
+        
     })
     .catch((err) => { 
-      console.log(err.response.data);
+      //console.log(err.response.data);
       alert('Atenção: '+err.response.data.message)
     });  
   }
@@ -79,8 +79,18 @@ const Form = () =>{
               <input className="btn btn-outline-secondary" name="dateEnd" type="datetime-local" value={alertSubmit.dateEnd} onChange={onChange}/>
           </div>
           <div style={{display: 'flex', flexDirection: 'column', padding: '20px 0px 20px 0px'}}>
-              Número de referencia do grupo:
-              <input className="form-control" name="group" type="number" value={alertSubmit.group} onChange={onChange}/>
+              <label>
+              Referencia do grupo para envio do alerta:
+              <br/>
+            <select className="btn btn-outline-secondary dropdown-toggle" name="group" value={alertSubmit.group} onChange={onChange}>
+              <option value="0000">TI Alerts - CDs</option>
+              <option value="0000">TI CD ON LINE - CD300</option>
+              <option value="0000">LABS RESOLVE / FISCAL- CDs</option>
+              <option value="0000">TI-CD's Online</option>
+              <option value="t_5099159096845692">Grupo de testes</option>
+          </select>
+        </label>
+              
           </div>
           <div>
           <label>

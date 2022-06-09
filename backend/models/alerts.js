@@ -6,7 +6,9 @@ const Alert = mongoose.model('Alert',{
     dateEnd:Date,
     group:String,
     frequencia:String,
-    file: Buffer
+    file: Buffer,
+    fileName:String,
+    status:String
 })
 
 module.exports = Alert

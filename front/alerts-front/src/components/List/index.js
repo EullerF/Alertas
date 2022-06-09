@@ -3,13 +3,15 @@ import api from "../../utils/api";
 import apiE from "../../utils/apiE";
 import {Container,Triangles} from "./styles";
 import triangle from "./loading.png";
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 
 export default function List() {
 
     const [loading, setLoading] = useState(false);
     const [alerts, setAlerts] = useState([]);
-    const [posts, setPosts] = useState([]);
     const [counter, setCounter] = useState(0);
     const [counterRefresh, setCounterRefresh] = useState(false);
 
@@ -60,6 +62,19 @@ export default function List() {
           console.error("ops! ocorreu um erro" + err);
         }); 
     }
+
+    function atualiza(status,id) {
+        api
+        .patch("http://localhost:5000/alerts/"+id+"")
+        .then(function(response) {
+            
+        })
+        .catch((err) => {
+          console.error("ops! ocorreu um erro" + err);
+        }); 
+    }
+
+
             
             const lista = alerts.map((alerta)=>{
                 const dateI = new Date(alerta.dateInit)
@@ -72,40 +87,25 @@ export default function List() {
                     <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
                     <p style={{color:'#8FBC8F'}}>Próximo envio agendado: </p><p>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</p>
                     <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</p>
-                    <div style={{flexDirection: 'column', alignContent:'center', alignItems:'center', justifyContent:'center'}}>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center'}}>
                     <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
+                    <br/>
+                    <RadioGroup
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="controlled-radio-buttons-group"
+                        value={alerta.status}
+                        onChange={(value)=> atualiza(value,alerta.id)}
+                    >
+                        <FormControlLabel value="Ativo" control={<Radio />} label="Ativo" />
+                        <FormControlLabel value="Pausado" control={<Radio />} label="Pausado" />
+                     </RadioGroup>
                     </div>
                     <hr className="solid"/>
                     </div>   
                 )
             }
             )
-
             
-            function listPost(){
-        
-            apiE
-              .get("https://my-json-server.typicode.com/brenner-sb/test-api/posts")
-              .then(function(response) {
-                  console.log(response.data)
-                  setPosts(response.data)
-              })
-              .catch((err) => {
-                console.error("ops! ocorreu um erro" + err);
-              });   
-              
-    }
-            const listaPosts = posts.map((post)=>{
-                return(
-                    <div>
-                    <p style={{color:'black'}}>Descrição do Alerta Publicado:</p><p>{post.message}</p>
-                    <hr className="solid"/>
-                    </div>
-                )
-            }
-            )
-            
-
 
 
 
@@ -132,15 +132,6 @@ export default function List() {
                 </div>
                 }
                 </div>
-                <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                <button  style={{padding: '8px'}} type="button" className="btn btn-outline-primary"onClick={listPost}>Listar Publicações Realizadas</button>
-                <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                {
-                    listaPosts
-                }
-                </div>
-                </div>
-                
                 </div>
         </div>
     )
