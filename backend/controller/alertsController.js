@@ -286,10 +286,29 @@ module.exports = class alertsController {
          res.status(500).json({error:'Dados não encontrados'})
          return
         }
-         const alerts = data
+         
          res.status(200).json({delete:true})
          console.log('DELETADO')
          return
+        })
+    }
+
+    // Editar Status do Alerta
+    static async editStatus(req, res) {
+        const id = req.params.id
+        const {status}=req.body
+        
+        const query = `UPDATE alert SET status ='${status}' WHERE alert.id = '${id}'`
+
+        conn.query(query, function (err, data) {
+        if (err) {
+         console.log(err)
+         res.status(500).json({error:'Dados não encontrados'})
+         return
+        }
+        res.status(200).json({atualizado:true})
+        console.log(id+' Atualizado para: '+status)
+        return
         })
     }
     

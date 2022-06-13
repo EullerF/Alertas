@@ -1,6 +1,5 @@
 import React, { useState , useEffect } from "react";
 import api from "../../utils/api";
-import apiE from "../../utils/apiE";
 import {Container,Triangles} from "./styles";
 import triangle from "./loading.png";
 import Radio from '@mui/material/Radio';
@@ -63,23 +62,26 @@ export default function List() {
         }); 
     }
 
-    function atualiza(status,id) {
+    function atualiza(newStatus,id) {
+      
+        const {value} = newStatus.target;
+       
         api
-        .patch("http://localhost:5000/alerts/"+id+"")
+        .patch("http://localhost:5000/alerts/"+id+"",{
+            "status":value
+        })
         .then(function(response) {
-            
+            setCounter(counter + 1);
         })
         .catch((err) => {
           console.error("ops! ocorreu um erro" + err);
         }); 
     }
-
-
             
             const lista = alerts.map((alerta)=>{
                 const dateI = new Date(alerta.dateInit)
                 const dateE = new Date(alerta.dateEnd)
-
+                
                 return(
                     <div>
                     <p style={{color:'black'}}>Descrição do Alerta:</p><p> {alerta.alertDescription}</p>
@@ -90,15 +92,30 @@ export default function List() {
                     <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center'}}>
                     <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
                     <br/>
-                    <RadioGroup
+                    <select className="btn btn-outline-secondary dropdown-toggle" 
+                    name="status" 
+                    value={alerta.status} 
+                    onChange={(value)=> {
+                            atualiza(value,alerta.id)
+                        }}
+                    >
+                        <option value="Ativo">Ativo</option>
+                        <option value="Inativo">Inativo</option>
+                        <option value="Stop">Stop</option>
+                    </select>
+                 {/*  <RadioGroup
                         aria-labelledby="demo-controlled-radio-buttons-group"
                         name="controlled-radio-buttons-group"
-                        value={alerta.status}
-                        onChange={(value)=> atualiza(value,alerta.id)}
+                        value={status}
+                        onChange={(value)=> {
+                            const attStatus = value
+                            atualiza(attStatus,alerta.id)
+                        }}
                     >
                         <FormControlLabel value="Ativo" control={<Radio />} label="Ativo" />
-                        <FormControlLabel value="Pausado" control={<Radio />} label="Pausado" />
-                     </RadioGroup>
+                        <FormControlLabel value="Inativo" control={<Radio />} label="Inativo" />
+                        <FormControlLabel value="Stop" control={<Radio />} label="Stop" />
+                    </RadioGroup> */}
                     </div>
                     <hr className="solid"/>
                     </div>   
