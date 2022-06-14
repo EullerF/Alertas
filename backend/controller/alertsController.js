@@ -154,11 +154,26 @@ module.exports = class alertsController {
         })
     }
 
+        // Listar Alertas Ativos
+        static async getAtivos(req, res) {
+
+            const query = `SELECT * FROM alert WHERE alert.status = 'Ativo'`
+    
+            conn.query(query, function (err, data) {
+            if (err) {
+             console.log(err)
+             res.status(500).json({error:'Dados não encontrados'})
+            }
+             const alerts = data
+             res.status(200).json(alerts)
+            })
+        }
+
 
     static async attDate(req, res) {
         let alerts
         let alertas = []
-        const query = `SELECT * FROM alert`
+        const query = `SELECT * FROM alert WHERE alert.status = 'Ativo' OR alert.status = 'Stop'`
 
         conn.query(query, function (err, data) {
         if (err) {
@@ -225,6 +240,7 @@ module.exports = class alertsController {
         console.log(mySQLDateString)
         const query = `UPDATE alert SET dateInit = '${mySQLDateString}' WHERE alert.id = '${doc.id}'`
 
+
         conn.query(query, function (err, data) {
             if (err) {
              console.log(err)
@@ -232,6 +248,10 @@ module.exports = class alertsController {
              return
             }
             })
+            if(doc.status=='Stop'){
+                res.status(110).json({message:'Agendamento Pausado'})
+                return
+            }
             if(doc.fileName==''){
                 res.status(200).json(doc)
                 return

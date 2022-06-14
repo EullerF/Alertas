@@ -51,7 +51,7 @@ const App = () =>{
                 }
               })
               .catch((error) => {
-                console.log('Nada agendado');
+                console.log('Nada ativo agendado');
                 setEnvia({
                     alerta:'',
                     status: false
