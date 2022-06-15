@@ -12,11 +12,12 @@ const Form = () =>{
   
   const alertInit = {
     alertDescription:'',
-    group:'',
+    group:'0000',
     dateInit:'',
     dateEnd:'',
-    frequencia:'',
+    frequencia:'HR',
     file:'',
+    frequenciaHr:0
   }
   const [alertSubmit, setalertSubmit] = useState(alertInit)
 
@@ -47,10 +48,11 @@ const Form = () =>{
         alert('Cadastrado com Sucesso')
         setalertSubmit({
           alertDescription:'',
-          group:'',
+          group:'0000',
           dateInit:'',
           dateEnd:'',
-          frequencia:'',
+          frequencia:'HR',
+          frequenciaHr:0,
           file:null, 
         })
         
@@ -84,9 +86,9 @@ const Form = () =>{
               <br/>
             <select className="btn btn-outline-secondary dropdown-toggle" name="group" value={alertSubmit.group} onChange={onChange}>
               <option value="0000">TI Alerts - CDs</option>
-              <option value="0000">TI CD ON LINE - CD300</option>
-              <option value="0000">LABS RESOLVE / FISCAL- CDs</option>
-              <option value="0000">TI-CD's Online</option>
+              <option value="0001">TI CD ON LINE - CD300</option>
+              <option value="0002">LABS RESOLVE / FISCAL- CDs</option>
+              <option value="0003">TI-CD's Online</option>
               <option value="t_5099159096845692">Grupo de testes</option>
           </select>
         </label>
@@ -95,15 +97,51 @@ const Form = () =>{
           <div>
           <label>
           Escolha a Frequência de divulgação do alerta:
+          <div style={{display: 'flex', flexDirection: 'row'}}>
             <br/>
             <select className="btn btn-outline-secondary dropdown-toggle" name="frequencia" value={alertSubmit.frequencia} onChange={onChange}>
+            <option value="HR">Escolher frequência em Horas</option>
             <option value="diariamente">Diariamente</option>
             <option value="semanalmente">Semanalmente</option>
             <option value="quinzenalmente">Quinzenalmente</option>
             <option value="mensalmente">Mensalmente</option>
             <option value="semestralmente">Semestralmente</option>
           </select>
+          {alertSubmit.frequencia=='HR' 
+          ?
+          <div style={{padding:'5px'}}>
+          <select className="btn btn-outline-secondary dropdown-toggle" name="frequenciaHr" value={alertSubmit.frequenciaHr} onChange={onChange} >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+            <option value="16">16</option>
+            <option value="17">17</option>
+            <option value="18">18</option>
+            <option value="19">19</option>
+            <option value="20">20</option>
+            <option value="21">21</option>
+            <option value="22">22</option>
+            <option value="23">23</option>
+          </select>
+          </div>
+          :
+          <div></div>
+          }
+          </div>
         </label>
+
           </div>
 
         </label>

@@ -2,6 +2,8 @@ import React, { useState , useEffect } from "react";
 import api from "../../utils/api";
 import {Container,Triangles} from "./styles";
 import triangle from "./loading.png";
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
+
 
 
 
@@ -217,9 +219,11 @@ export default function List() {
                 </Container>
                 :
                 <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
+                <Table>
                 {
                     listaAtiva
                 }
+                </Table>
                 </div>
                 }
                 </div>

@@ -26,15 +26,19 @@ Date.prototype.addDias = function(dias){
 Date.prototype.addMeses = function(meses){
     this.setMonth(this.getMonth() + meses)
 };
-// Ajustando a Hora
+// 
 Date.prototype.addHoras = function(horas){
+    this.setHours(this.getHours() + horas)
+};
+// Ajustando a Hora
+Date.prototype.addHorasAjuste = function(horas){
     this.setHours(this.getHours() - horas)
 };
 
 module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
-        const {alertDescription,group,dateInit,dateEnd,frequencia}=req.body
+        const {alertDescription,group,dateInit,dateEnd,frequencia,frequenciaHr}=req.body
         
         let image = ''
 
@@ -75,13 +79,15 @@ module.exports = class alertsController {
                     let fileContent  = base64_encode(image);//Colocando o nome do arquivo que será enviado para o banco
 		    	
                 if(!alertDescription){
-                    const query = `INSERT INTO alert (dateInit, dateEnd, grupo, frequencia, file, fileName) VALUES ( 
+                    const query = `INSERT INTO alert (dateInit, dateEnd, grupo, frequencia,frequenciaHr, file, fileName, status) VALUES ( 
                         '${dateInit}', 
                         '${dateEnd}', 
                         '${group}', 
                         '${frequencia}',
+                        '${frequenciaHr}',
                         '${fileContent}',
-                        '${image}'
+                        '${image}',
+                        'Ativo'
                         )`
             
                     conn.query(query , function(err){
@@ -95,14 +101,16 @@ module.exports = class alertsController {
                     })
                 }
                 else if(alertDescription){
-		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, file, fileName) VALUES ( 
+		    	const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia, frequenciaHr, file, fileName, status) VALUES ( 
                     '${alertDescription}', 
                     '${dateInit}', 
                     '${dateEnd}', 
                     '${group}', 
                     '${frequencia}',
+                    '${frequenciaHr}',
                     '${fileContent}',
-                    '${image}'
+                    '${image}',
+                    'Ativo'
                     )`
         
                 conn.query(query , function(err){
@@ -117,12 +125,14 @@ module.exports = class alertsController {
             }
             }
             else if (alertDescription){
-                const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia) VALUES ( 
+                const query = `INSERT INTO alert (alertDescription, dateInit, dateEnd, grupo, frequencia,frequenciaHr, status) VALUES ( 
                     '${alertDescription}', 
                     '${dateInit}', 
                     '${dateEnd}', 
                     '${group}', 
-                    '${frequencia}'
+                    '${frequencia}',
+                    '${frequenciaHr}',
+                    'Ativo'
                     )`
         
                 conn.query(query , function(err){
@@ -196,6 +206,9 @@ module.exports = class alertsController {
         if(alertas.length!=0)
         {
             alertas.forEach(publicacoes => {
+                        if(publicacoes.frequencia=='HR'){
+                            publicacoes.dateInit.addHoras(publicacoes.frequenciaHr)
+                        }
                         if(publicacoes.frequencia=='diariamente')
                         {
                             publicacoes.dateInit.addDias(1)
@@ -217,7 +230,7 @@ module.exports = class alertsController {
                             publicacoes.dateInit.addMeses(6)
                         }
                       var currentTimeZoneOffsetInHours = publicacoes.dateInit.getTimezoneOffset() / 60;
-                      publicacoes.dateInit.addHoras(currentTimeZoneOffsetInHours)
+                      publicacoes.dateInit.addHorasAjuste(currentTimeZoneOffsetInHours)
                       Update(publicacoes)  
                       
             })
