@@ -2,7 +2,7 @@ import React, { useState , useEffect } from "react";
 import api from "../../utils/api";
 import {Container,Triangles} from "./styles";
 import triangle from "./loading.png";
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@material-ui/core'
+import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@material-ui/core'
 
 
 
@@ -115,15 +115,14 @@ export default function List() {
                 const dateE = new Date(alerta.dateEnd)
                 
                 return(
-                    <div>
-                    <p style={{color:'black'}}>Descrição do Alerta:</p><p> {alerta.alertDescription}</p>
-                    <p style={{color:'black'}}>Código do Grupo: </p><p>{alerta.grupo}</p>
-                    <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
-                    <p style={{color:'#8FBC8F'}}>Próximo envio agendado: </p><p>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</p>
-                    <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</p>
-                    <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center'}}>
-                    <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
-                    <br/>
+                    <TableRow key={alerta.alertDescription}>
+                        
+                        <TableCell>{alerta.alertDescription}</TableCell>
+                        <TableCell>{alerta.grupo}</TableCell>
+                        <TableCell>{alerta.frequencia}</TableCell>
+                        <TableCell style={{color:'#8FBC8F', fontWeight:'bold'}}>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
+                        <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
+                    <TableCell>
                     {alerta.status=='Inativo'
                     ?
                     <select className="btn btn-outline-secondary dropdown-toggle" 
@@ -145,9 +144,9 @@ export default function List() {
                         <option value="Stop">Stop</option>
                     </select>
                     }
-                    </div>
-                    <hr className="solid"/>
-                    </div>   
+                    </TableCell>
+                    </TableRow>
+                      
                 )
             }
             )
@@ -156,16 +155,18 @@ export default function List() {
                 const dateI = new Date(alerta.dateInit)
                 const dateE = new Date(alerta.dateEnd)  
                 return(
-                    <div>
-                    <p style={{color:'black'}}>Descrição do Alerta:</p><p> {alerta.alertDescription}</p>
-                    <p style={{color:'black'}}>Código do Grupo: </p><p>{alerta.grupo}</p>
-                    <p style={{color:'black'}}>Frequência de divulgação: </p><p>{alerta.frequencia}</p>
-                    <p style={{color:'#8FBC8F'}}>Próximo envio agendado: </p><p>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</p>
-                    <p style={{color:'#CD5C5C'}}>Data Final: </p><p>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</p>
-                    <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center'}}>
+                    <TableRow key={alerta.alertDescription}>
+                        
+                        <TableCell>{alerta.alertDescription}</TableCell>
+                        <TableCell>{alerta.grupo}</TableCell>
+                        <TableCell>{alerta.frequencia}</TableCell>
+                        <TableCell style={{color:'#8FBC8F', fontWeight:'bold'}}>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
+                        <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
+                    <TableCell>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center', padding: '2px'}}>
                     <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
-                    <br/>
                     <select className="btn btn-outline-secondary dropdown-toggle" 
+                    style={{marginTop:'2px'}}
                     name="status" 
                     value={alerta.status} 
                     onChange={(value)=> {
@@ -176,9 +177,9 @@ export default function List() {
                         <option value="Inativo">Inativo</option>
                         <option value="Stop">Stop</option>
                     </select>
-                    <hr className="solid"/>
                     </div>
-                    </div>
+                    </TableCell>
+                    </TableRow>
                 )
             }
             )
@@ -186,7 +187,7 @@ export default function List() {
 
     return(
         <div className="List" style={{borderRadius:'20x'}}>
-            <div className="btn-group" role="group" aria-label="Basic outlined example" style={{display: 'flex', flexDirection: 'row', padding:'5px'}} >
+            <div className="btn-group" role="group" aria-label="Basic outlined example" style={{display: 'flex', flexDirection: 'column', padding:'5px'}} >
                 <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
                 <button  style={{padding: '8px'}} type="button" className="btn btn-outline-primary" onClick={list}>Listar todas as publicações</button>
                 {loading===true && lista.length === 0
@@ -200,9 +201,29 @@ export default function List() {
                 </Container>
                 :
                 <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
+                    <Paper
+                style={{
+                    width: '100%',
+                    marginTop:'3px',
+                    overflowX: 'auto'
+                }}>
+                <Table style={{minWidth:'650px'}}>
+                <TableHead>
+                    <TableRow>
+                    <TableCell>Descrição do Alerta:</TableCell>
+                    <TableCell>Código do Grupo:</TableCell>
+                    <TableCell>Frequência de divulgação:</TableCell>
+                    <TableCell>Próximo envio agendado:</TableCell>
+                    <TableCell>Data Final:</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                 {
                     lista
                 }
+                </TableBody>
+                </Table>
+                </Paper>
                 </div>
                 }
                 </div>
@@ -219,11 +240,29 @@ export default function List() {
                 </Container>
                 :
                 <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                <Table>
+                <Paper
+                style={{
+                    width: '100%',
+                    marginTop:'3px',
+                    overflowX: 'auto'
+                }}>
+                <Table style={{minWidth:'650px'}}>
+                <TableHead>
+                    <TableRow>
+                    <TableCell>Descrição do Alerta:</TableCell>
+                    <TableCell>Código do Grupo:</TableCell>
+                    <TableCell>Frequência de divulgação:</TableCell>
+                    <TableCell>Próximo envio agendado:</TableCell>
+                    <TableCell>Data Final:</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                 {
                     listaAtiva
                 }
+                </TableBody>
                 </Table>
+                </Paper>
                 </div>
                 }
                 </div>

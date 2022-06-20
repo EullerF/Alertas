@@ -17,7 +17,7 @@ const Form = () =>{
     dateEnd:'',
     frequencia:'HR',
     file:'',
-    frequenciaHr:0
+    frequenciaHr:1
   }
   const [alertSubmit, setalertSubmit] = useState(alertInit)
 
@@ -52,8 +52,8 @@ const Form = () =>{
           dateInit:'',
           dateEnd:'',
           frequencia:'HR',
-          frequenciaHr:0,
-          file:null, 
+          frequenciaHr:1,
+          file:'', 
         })
         
     })
