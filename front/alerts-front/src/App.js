@@ -18,11 +18,18 @@ const App = () =>{
               .patch("http://localhost:5000/alerts/")
               .then(function(response) {
                 if(response.data.alertDescription){
-                    console.log('Teste Entrou')
+                  let objgroup
+                  objgroup = JSON.parse(response.data.grupo)
+                  const tamanho = objgroup.length
+                  let i = 0
+                  while(i<tamanho)
+                  {
+                      const threadK=objgroup[i]['value']
+                  
                 apiWork
                     .post("https://graph.facebook.com/v11.0/me/messages?access_token=",{
                           "recipient": {
-                              "thread_key": response.data.grupo
+                              "thread_key": threadK
                           },
                           "message": {
                               "text": response.data.alertDescription,      
@@ -40,8 +47,8 @@ const App = () =>{
                       console.log(erro)
                       
                     });
-                  
-                  
+                    i=i+1
+                }
                 }
                 else{
                     setEnvia({

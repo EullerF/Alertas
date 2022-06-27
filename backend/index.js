@@ -18,4 +18,7 @@ app.use('/alerts', alertsRoutes)
 const usersRoutes = require('./routes/usersRoutes')
 app.use('/users', usersRoutes)
 
+const groupsRoutes = require('./routes/groupsRoutes')
+app.use('/groups', groupsRoutes)
+
 app.listen(5000)

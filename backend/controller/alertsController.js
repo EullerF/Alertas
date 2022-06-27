@@ -39,9 +39,8 @@ module.exports = class alertsController {
     // Cadastrar Alerta
     static async create(req, res) {
         const {alertDescription,group,dateInit,dateEnd,frequencia,frequenciaHr}=req.body
-        
+        console.log(group)
         let image = ''
-
         if (req.file) {
         image = req.file.filename
         console.log({image})
@@ -93,7 +92,7 @@ module.exports = class alertsController {
                     conn.query(query , function(err){
                         if(err){
                             console.log(err)
-                            res.status(422).json({error:'Alerta não cadastrado, preencha todos os campos'})
+                            res.status(500).json({error:'Alerta não cadastrado no banco'})
                         }
                         console.log('Inserido no Mysql')
                         res.status(201).json({message: 'Alerta criado com sucesso'})
@@ -116,7 +115,7 @@ module.exports = class alertsController {
                 conn.query(query , function(err){
                     if(err){
                         console.log(err)
-                        res.status(422).json({error:'Alerta não cadastrado, preencha todos os campos'})
+                        res.status(500).json({error:'Alerta não cadastrado no banco'})
                     }
                     console.log('Inserido no Mysql')
                     res.status(201).json({message: 'Alerta criado com sucesso'})
@@ -138,7 +137,7 @@ module.exports = class alertsController {
                 conn.query(query , function(err){
                     if(err){
                         console.log(err)
-                        res.status(422).json({error:'Alerta não cadastrado, preencha todos os campos'})
+                        res.status(500).json({error:'Alerta não cadastrado no banco'})
                     }
                     console.log('Inserido no Mysql')
                     res.status(201).json({message: 'Alerta criado com sucesso'})
@@ -270,10 +269,19 @@ module.exports = class alertsController {
                 return
             }
             else{
+            let objgroup
+            objgroup = JSON.parse(doc.grupo)
+            const tamanho = objgroup.length
+            let i = 0
+            while(i<tamanho)
+            {
+                const threadK=objgroup[i]['value']
+                
+            
             const FormData = require('form-data');
             const fs = require('fs');
             let data = new FormData();
-            data.append('recipient', '{"thread_key":"'+doc.grupo+'"}');
+            data.append('recipient', '{"thread_key":"'+threadK+'"}');
             data.append('message', '{"attachment":{"type":"image", "payload":{"is_reusable":true}}}');
             data.append('filedata', fs.createReadStream('../src/temp/'+doc.fileName));
             
@@ -295,12 +303,13 @@ module.exports = class alertsController {
               }
               else{
               res.status(200).json(doc)
-              return
               }
             })
             .catch((error) => {
               console.log(error);
             });
+            i=i+1
+            }
         }
 
     }

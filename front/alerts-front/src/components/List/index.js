@@ -123,16 +123,20 @@ export default function List() {
                         <TableCell style={{color:'#8FBC8F', fontWeight:'bold'}}>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                         <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                     <TableCell>
+                    <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center',padding: '2px'}}>
+                    <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
                     {alerta.status=='Inativo'
                     ?
                     <select className="btn btn-outline-secondary dropdown-toggle" 
+                    style={{marginTop:'2px'}}
                     name="status" 
                     value={alerta.status} 
                     >
                         <option value="Inativo">Inativo</option>
                     </select>
                     :
-                    <select className="btn btn-outline-secondary dropdown-toggle" 
+                    <select className="btn btn-outline-secondary dropdown-toggle"
+                    style={{marginTop:'2px'}}
                     name="status" 
                     value={alerta.status} 
                     onChange={(value)=> {
@@ -144,6 +148,7 @@ export default function List() {
                         <option value="Stop">Stop</option>
                     </select>
                     }
+                    </div>
                     </TableCell>
                     </TableRow>
                       
@@ -201,13 +206,17 @@ export default function List() {
                 </Container>
                 :
                 <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                    <Paper
+                <Paper
                 style={{
                     width: '100%',
                     marginTop:'3px',
                     overflowX: 'auto'
                 }}>
-                <Table style={{minWidth:'650px'}}>
+                {lista.length === 0
+                ?
+                <div></div>
+                :
+                <Table style={{minWidth:'400px', maxWidth:'500px'}}>
                 <TableHead>
                     <TableRow>
                     <TableCell>Descrição do Alerta:</TableCell>
@@ -223,6 +232,7 @@ export default function List() {
                 }
                 </TableBody>
                 </Table>
+                }
                 </Paper>
                 </div>
                 }
@@ -246,7 +256,11 @@ export default function List() {
                     marginTop:'3px',
                     overflowX: 'auto'
                 }}>
-                <Table style={{minWidth:'650px'}}>
+                {listaAtiva.length === 0
+                ?
+                <div></div>
+                :
+                <Table style={{minWidth:'400px', maxWidth:'700px'}}>
                 <TableHead>
                     <TableRow>
                     <TableCell>Descrição do Alerta:</TableCell>
@@ -262,6 +276,7 @@ export default function List() {
                 }
                 </TableBody>
                 </Table>
+                }
                 </Paper>
                 </div>
                 }

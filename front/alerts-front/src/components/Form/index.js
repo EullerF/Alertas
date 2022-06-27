@@ -1,18 +1,27 @@
 import React from "react";
 import api from '../../utils/api';
 import { useState, useEffect } from 'react';
+import { MultiSelect } from "react-multi-select-component";
 
 
 const Form = () =>{
-
+  const [groups, setGroups] = useState([])
+  const [selectedG, setSelectedG] = useState([]);
   const [counter,setCounter] = useState(0);
   useEffect(()=>{
-    console.log(alertSubmit)
-  },[counter]);
+    api
+                  .get("http://localhost:5000/groups/")
+                  .then(function(response) {
+                      setGroups(response.data)
+                  })
+                  .catch((err) => {
+                    console.error("ops! ocorreu um erro" + err);
+                  }); 
+  },[]);
   
   const alertInit = {
     alertDescription:'',
-    group:'0000',
+    group:[],
     dateInit:'',
     dateEnd:'',
     frequencia:'HR',
@@ -20,10 +29,15 @@ const Form = () =>{
     frequenciaHr:1
   }
   const [alertSubmit, setalertSubmit] = useState(alertInit)
-
+  
     function onChange(event){
     const {name , value} = event.target;
     setalertSubmit({...alertSubmit, [name]:value});
+  }
+  function onChangeG(name,value){
+    setSelectedG(value)
+    const StringGrupos = JSON.stringify(value,['value'])
+    setalertSubmit({...alertSubmit, [name]:StringGrupos});
   }
 
   function onFileChange(event) {
@@ -34,7 +48,6 @@ const Form = () =>{
     event.preventDefault();
 
     const formData = new FormData()
-
     const fileFormData =  Object.keys(alertSubmit).forEach((key) => formData.append(key, alertSubmit[key]))
 
     formData.append('arq', fileFormData)
@@ -48,7 +61,7 @@ const Form = () =>{
         alert('Cadastrado com Sucesso')
         setalertSubmit({
           alertDescription:'',
-          group:'0000',
+          group:[],
           dateInit:'',
           dateEnd:'',
           frequencia:'HR',
@@ -84,14 +97,14 @@ const Form = () =>{
               <label>
               Referencia do grupo para envio do alerta:
               <br/>
-            <select className="btn btn-outline-secondary dropdown-toggle" name="group" value={alertSubmit.group} onChange={onChange}>
-              <option value="0000">TI Alerts - CDs</option>
-              <option value="0001">TI CD ON LINE - CD300</option>
-              <option value="0002">LABS RESOLVE / FISCAL- CDs</option>
-              <option value="0003">TI-CD's Online</option>
-              <option value="t_5099159096845692">Grupo de testes</option>
-          </select>
-        </label>
+                  <MultiSelect
+                    name="group"
+                    options={groups}
+                    value={selectedG}
+                    onChange={(value) => onChangeG('group',value)}
+                    labelledBy="Select"
+                  />
+              </label>
               
           </div>
           <div>
@@ -107,7 +120,7 @@ const Form = () =>{
             <option value="mensalmente">Mensalmente</option>
             <option value="semestralmente">Semestralmente</option>
           </select>
-          {alertSubmit.frequencia=='HR' 
+          {alertSubmit.frequencia==='HR' 
           ?
           <div style={{padding:'5px'}}>
           <select className="btn btn-outline-secondary dropdown-toggle" name="frequenciaHr" value={alertSubmit.frequenciaHr} onChange={onChange} >
