@@ -113,13 +113,30 @@ export default function List() {
             const lista = alerts.map((alerta)=>{
                 const dateI = new Date(alerta.dateInit)
                 const dateE = new Date(alerta.dateEnd)
-                
+                let objgroup
+                objgroup = JSON.parse(alerta.grupo)
+                const tamanho = objgroup.length
+                const nameGrupos = []
+                let i = 0
+                    while(i<tamanho)
+                    {
+                        nameGrupos.push(objgroup[i]['label'])
+                        i=i+1
+                        if(i<tamanho){
+                            nameGrupos.push(' , ')
+                        }
+                    }
                 return(
                     <TableRow key={alerta.alertDescription}>
                         
                         <TableCell>{alerta.alertDescription}</TableCell>
-                        <TableCell>{alerta.grupo}</TableCell>
+                        <TableCell>{nameGrupos}</TableCell>
+                        {alerta.frequencia==='HR'
+                        ?
+                        <TableCell>{alerta.frequenciaHr} {alerta.frequencia}</TableCell>
+                        :
                         <TableCell>{alerta.frequencia}</TableCell>
+                        }
                         <TableCell style={{color:'#8FBC8F', fontWeight:'bold'}}>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                         <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                     <TableCell>
@@ -158,13 +175,31 @@ export default function List() {
 
             const listaAtiva = alertsAtivos.map((alerta)=>{
                 const dateI = new Date(alerta.dateInit)
-                const dateE = new Date(alerta.dateEnd)  
+                const dateE = new Date(alerta.dateEnd)
+                let objgroup
+                objgroup = JSON.parse(alerta.grupo)
+                const tamanho = objgroup.length
+                const nameGrupos = []
+                let i = 0
+                    while(i<tamanho)
+                    {
+                        nameGrupos.push(objgroup[i]['label'])
+                        i=i+1
+                        if(i<tamanho){
+                            nameGrupos.push(' , ')
+                        }
+                    }
                 return(
                     <TableRow key={alerta.alertDescription}>
                         
                         <TableCell>{alerta.alertDescription}</TableCell>
-                        <TableCell>{alerta.grupo}</TableCell>
+                        <TableCell>{nameGrupos}</TableCell>
+                        {alerta.frequencia==='HR'
+                        ?
+                        <TableCell>{alerta.frequenciaHr} {alerta.frequencia}</TableCell>
+                        :
                         <TableCell>{alerta.frequencia}</TableCell>
+                        }
                         <TableCell style={{color:'#8FBC8F', fontWeight:'bold'}}>{dateI.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                         <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                     <TableCell>
@@ -216,7 +251,7 @@ export default function List() {
                 ?
                 <div></div>
                 :
-                <Table style={{minWidth:'400px', maxWidth:'500px'}}>
+                <Table style={{minWidth:'600px', maxWidth:'1200px'}}>
                 <TableHead>
                     <TableRow>
                     <TableCell>Descrição do Alerta:</TableCell>
@@ -260,7 +295,7 @@ export default function List() {
                 ?
                 <div></div>
                 :
-                <Table style={{minWidth:'400px', maxWidth:'700px'}}>
+                <Table style={{minWidth:'600px', maxWidth:'1200px'}}>
                 <TableHead>
                     <TableRow>
                     <TableCell>Descrição do Alerta:</TableCell>

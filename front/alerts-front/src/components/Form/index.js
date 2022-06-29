@@ -36,7 +36,7 @@ const Form = () =>{
   }
   function onChangeG(name,value){
     setSelectedG(value)
-    const StringGrupos = JSON.stringify(value,['value'])
+    const StringGrupos = JSON.stringify(value,['value','label'])
     setalertSubmit({...alertSubmit, [name]:StringGrupos});
   }
 
