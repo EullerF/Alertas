@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect, Fragment  } from 'react';
 import Form from "../Form";
+import Group from "../Group";
 import List from "../List";
 import PropTypes from 'prop-types'
 import { Box, Tabs as TabsComponent, Tab, Typography } from '@material-ui/core'
@@ -18,7 +19,7 @@ function TabPanel (props) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      <Box p={3}>{children}</Box>
+      <Box p={4}>{children}</Box>
     </Typography>
   )
 }
@@ -58,7 +59,8 @@ function CardAdmin () {
                     >
                     <Tab label="Cadastro de Mensages" />
                     <Tab label="Lista"  />
-                    <Tab label="Cadastro de Grupos" disabled />
+                    <Tab label="Administrar Grupos" />
+                    <Tab label="Cadastro de Usuários" />
                     </TabsComponent>
                 </Paper>
                     <TabPanel value={value} index={0}>
@@ -68,15 +70,20 @@ function CardAdmin () {
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
-                        <List></List>
+                        <List val={true}></List>
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={2}>
-                        Teste
+                        <div className="card-footer text-muted">
+                        <Group></Group>
+                        </div>
                     </TabPanel>
-    </Fragment>
-            
-            
+                    <TabPanel value={value} index={3}>
+                        <div className="card-footer text-muted">
+                        Cadastro de User
+                        </div>
+                    </TabPanel>
+              </Fragment>
         </div>
     )
     }

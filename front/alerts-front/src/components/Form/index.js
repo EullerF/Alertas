@@ -68,7 +68,7 @@ const Form = () =>{
           frequenciaHr:1,
           file:'', 
         })
-        
+        setSelectedG([])
     })
     .catch((err) => { 
       //console.log(err.response.data);

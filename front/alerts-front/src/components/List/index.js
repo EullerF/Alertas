@@ -1,24 +1,53 @@
-import React, { useState , useEffect } from "react";
+import React, { useState , useEffect, Fragment} from "react";
 import api from "../../utils/api";
-import {Container,Triangles} from "./styles";
-import triangle from "./loading.png";
-import { Table, TableBody, TableCell, TableHead, TableRow, Paper } from '@material-ui/core'
+import { Box, Tabs as TabsComponent, Tab, Typography, TableRow, Table, TableBody, TableHead, TableCell } from '@material-ui/core'
+import PropTypes from 'prop-types'
+import DeleteIcon from '@material-ui/icons/Delete';
+import { Paper } from './style'
 
-
-
+function TabPanel (props) {
+    const { children, value, index, ...other } = props
+    
+  
+    return (
+      <Typography
+        component="div"
+        role="tabpanel"
+        hidden={value !== index}
+        id={`simple-tabpanel-${index}`}
+        aria-labelledby={`simple-tab-${index}`}
+        {...other}
+      >
+        <Box p={2}>{children}</Box>
+      </Typography>
+    )
+  }
+  
+  TabPanel.defaultProps = {
+    value: 0
+  }
+  
+  TabPanel.propTypes = {
+    children: PropTypes.node.isRequired,
+    value: PropTypes.number,
+    index: PropTypes.number.isRequired
+  }
 
 export default function List() {
 
-    const [loading, setLoading] = useState(false);
-    const [loadingA, setLoadingA] = useState(false);
+
     const [alerts, setAlerts] = useState([]);
     const [counter, setCounter] = useState(0);
-    const [counterRefresh, setCounterRefresh] = useState(false);
-    const [counterRefreshA, setCounterRefreshA] = useState(false);
     const [alertsAtivos, setAlertsAtivos] = useState([]);
+    const [value, setValue] = useState(0)
+
+    const handleChange = (event, newValue) => {
+        setValue(newValue)
+        setCounter(counter + 1)
+      }
 
     useEffect (() => {
-        if(counter!=0){
+        
         api
                   .get("http://localhost:5000/alerts/")
                   .then(function(response) {
@@ -36,52 +65,9 @@ export default function List() {
                   .catch((err) => {
                     console.error("ops! ocorreu um erro" + err);
                   });            
-                }
+                
     },[counter])
 
-    
-    function list(){
-            setLoading(true)
-            if(counterRefresh==true){
-                setAlerts([])
-                setCounterRefresh(false);
-                setLoading(false)
-            }
-            else if (counterRefresh==false){
-            api
-              .get("http://localhost:5000/alerts/")
-              .then(function(response) {
-                  console.log(response.data)
-                  setAlerts(response.data)
-                  setLoading(false)
-                  setCounterRefresh(true);
-              })
-              .catch((err) => {
-                console.error("ops! ocorreu um erro" + err);
-              });    
-            }
-    }
-
-    function listAtiva (){
-        setLoadingA(true)
-        if(counterRefreshA==true){
-            setAlertsAtivos([])
-            setCounterRefreshA(false);
-            setLoadingA(false)
-        }
-        else if (counterRefreshA==false){
-        api
-              .get("http://localhost:5000/alerts/ativos")
-              .then(function(response) {
-                  setAlertsAtivos(response.data)
-                  setCounterRefreshA(true);
-                  setLoadingA(false)
-              })
-              .catch((err) => {
-                console.error("ops! ocorreu um erro" + err);
-              });  
-        }
-    }
 
     function deleteAlert(id) {
         api
@@ -141,7 +127,7 @@ export default function List() {
                         <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                     <TableCell>
                     <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center',padding: '2px'}}>
-                    <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
+                    <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar <DeleteIcon fontSize="small"/></button>
                     {alerta.status=='Inativo'
                     ?
                     <select className="btn btn-outline-secondary dropdown-toggle" 
@@ -204,7 +190,7 @@ export default function List() {
                         <TableCell style={{color:'#CD5C5C', fontWeight:'bold'}}>{dateE.toLocaleString('pt-br', {timezone: 'Brazil/brt'})}</TableCell>
                     <TableCell>
                     <div style={{display: 'flex', flexDirection: 'column', justifyContent:'center', padding: '2px'}}>
-                    <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar</button>
+                    <button  className="btn btn-secondary btn-sm" style={{padding: '8px'}} type="button" onClick={() => deleteAlert(alerta.id)}>Deletar <DeleteIcon fontSize="small"/></button>
                     <select className="btn btn-outline-secondary dropdown-toggle" 
                     style={{marginTop:'2px'}}
                     name="status" 
@@ -228,19 +214,21 @@ export default function List() {
     return(
         <div className="List" style={{borderRadius:'20x'}}>
             <div className="btn-group" role="group" aria-label="Basic outlined example" style={{display: 'flex', flexDirection: 'column', padding:'5px'}} >
-                <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                <button  style={{padding: '8px'}} type="button" className="btn btn-outline-primary" onClick={list}>Listar todas as publicações</button>
-                {loading===true && lista.length === 0
-                ?
-                <Container>
-                <Triangles>
-                    <img src={triangle} alt="triangle1" className="triangle1" />
-                    <img src={triangle} alt="triangle2" className="triangle2" />
-                    <img src={triangle} alt="triangle3" className="triangle3" />
-                </Triangles>
-                </Container>
-                :
-                <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
+            <Fragment>
+                <Paper>
+                    <TabsComponent
+                    value={value}
+                    onChange={handleChange}
+                    indicatorColor="primary"
+                    textColor="primary"
+                    centered
+                    >
+                    <Tab label="Listar todas as publicações" />
+                    <Tab label="Lista"  />
+                    </TabsComponent>
+                </Paper>
+                    <TabPanel value={value} index={0}>
+                
                 <Paper
                 style={{
                     width: '100%',
@@ -254,11 +242,11 @@ export default function List() {
                 <Table style={{minWidth:'600px', maxWidth:'1200px'}}>
                 <TableHead>
                     <TableRow>
-                    <TableCell>Descrição do Alerta:</TableCell>
-                    <TableCell>Código do Grupo:</TableCell>
-                    <TableCell>Frequência de divulgação:</TableCell>
-                    <TableCell>Próximo envio agendado:</TableCell>
-                    <TableCell>Data Final:</TableCell>
+                    <TableCell style={{ fontWeight:'bold'}}>Descrição do Alerta:</TableCell>
+                    <TableCell style={{ fontWeight:'bold'}}>Código do Grupo:</TableCell>
+                    <TableCell style={{ fontWeight:'bold'}}>Frequência de divulgação:</TableCell>
+                    <TableCell style={{ fontWeight:'bold'}}>Próximo envio agendado:</TableCell>
+                    <TableCell style={{ fontWeight:'bold'}}>Data Final:</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -269,53 +257,40 @@ export default function List() {
                 </Table>
                 }
                 </Paper>
-                </div>
-                }
-                </div>
-                <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                <button  style={{padding: '8px'}} type="button" className="btn btn-outline-primary"onClick={listAtiva}>Listar publicações ativas</button>
-                {loadingA===true && listaAtiva.length === 0
-                ?
-                <Container>
-                <Triangles>
-                    <img src={triangle} alt="triangle1" className="triangle1" />
-                    <img src={triangle} alt="triangle2" className="triangle2" />
-                    <img src={triangle} alt="triangle3" className="triangle3" />
-                </Triangles>
-                </Container>
-                :
-                <div style={{display: 'flex', flexDirection: 'column', padding:'5px'}}>
-                <Paper
-                style={{
-                    width: '100%',
-                    marginTop:'3px',
-                    overflowX: 'auto'
-                }}>
-                {listaAtiva.length === 0
-                ?
-                <div></div>
-                :
-                <Table style={{minWidth:'600px', maxWidth:'1200px'}}>
-                <TableHead>
-                    <TableRow>
-                    <TableCell>Descrição do Alerta:</TableCell>
-                    <TableCell>Código do Grupo:</TableCell>
-                    <TableCell>Frequência de divulgação:</TableCell>
-                    <TableCell>Próximo envio agendado:</TableCell>
-                    <TableCell>Data Final:</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                {
-                    listaAtiva
-                }
-                </TableBody>
-                </Table>
-                }
-                </Paper>
-                </div>
-                }
-                </div>
+                    </TabPanel>
+                    <TabPanel value={value} index={1}>
+                        <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
+                        <Paper
+                        style={{
+                            width: '100%',
+                            marginTop:'3px',
+                            overflowX: 'auto'
+                        }}>
+                        {listaAtiva.length === 0
+                        ?
+                        <div></div>
+                        :
+                        <Table style={{minWidth:'600px', maxWidth:'1200px'}}>
+                        <TableHead>
+                            <TableRow>
+                            <TableCell style={{ fontWeight:'bold'}}>Descrição do Alerta:</TableCell>
+                            <TableCell style={{ fontWeight:'bold'}}>Código do Grupo:</TableCell>
+                            <TableCell style={{ fontWeight:'bold'}}>Frequência de divulgação:</TableCell>
+                            <TableCell style={{ fontWeight:'bold'}}>Próximo envio agendado:</TableCell>
+                            <TableCell style={{ fontWeight:'bold'}}>Data Final:</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                        {
+                            listaAtiva
+                        }
+                        </TableBody>
+                        </Table>
+                        }
+                        </Paper>
+                        </div>
+                    </TabPanel>
+            </Fragment>
                 </div>
                 
         </div>
