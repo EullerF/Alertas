@@ -5,11 +5,11 @@ import PropTypes from 'prop-types'
 import { Box, Tabs as TabsComponent, Tab, Typography, TableRow, Table, TableBody, TableHead, TableCell } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete';
 import { Paper } from './style'
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 
 function TabPanel (props) {
   const { children, value, index, ...other } = props
-  
 
   return (
     <Typography
@@ -41,6 +41,10 @@ function Group () {
   const [groups, setGroups] = useState([])
   const [value, setValue] = useState(0)
   const [counter, setCounter] = useState(0);
+  const [submit,setSubmit] = useState({
+    status:false,
+    message:''
+  });
   useEffect(()=>{
     api
                   .get("http://localhost:5000/groups/")
@@ -77,15 +81,22 @@ function Group () {
       label:groupSubmit.label
     })
     .then(function(response) {
-        alert('Cadastrado com Sucesso')
+        setSubmit({
+          status:true,
+          message:groupSubmit.label
+         })
         setgroupSubmit({
           value:'',
           label:''
         })
-       // setCounter(counter + 1)
+       delay(2)
     })
     .catch((err) => { 
-      alert('Atenção: '+err.response.data.message)
+      setSubmit({
+        status:false,
+        message:err.response.data.message
+       })
+       delay(3)
     });  
   }
 
@@ -99,6 +110,16 @@ function Group () {
       console.error("ops! ocorreu um erro" + err);
     }); 
   }
+
+  function delay(n){
+    setTimeout(()=>{
+      setSubmit({
+      status:false,
+      message:''
+      })
+      return
+    },n*1000)
+}
   
   const listaGrupos = groups.map((doc)=>{
     return(
@@ -128,6 +149,24 @@ function Group () {
                 </Paper>
                     <TabPanel value={value} index={0}>
                         <div className="card-footer text-muted">
+                        {submit.status===true && submit.message!==''
+                          ?
+                          <Alert severity="success">
+                          <AlertTitle>Cadastrado com sucesso</AlertTitle>
+                            Grupo <strong>{submit.message}</strong> adicionado.
+                          </Alert>
+                          :
+                          <div></div>
+                        }
+                        {submit.status===false && submit.message!==''
+                          ?
+                          <Alert severity="warning">
+                          <AlertTitle>Cadastro não realizado</AlertTitle>
+                            Atenção <strong>{submit.message}</strong> .
+                          </Alert>
+                          :
+                          <div></div>
+                        }
                         <form onSubmit={Cadastrar} enctype='multipart/form-data'  style={{display: 'flex', flexDirection: 'column'}}>
                           <br/>
                           <div style={{display: 'flex', flexDirection: 'column'}}>

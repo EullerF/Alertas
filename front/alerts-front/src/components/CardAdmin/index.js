@@ -42,7 +42,7 @@ function CardAdmin () {
   }
 
     return(
-        <div className="card" style={{borderRadius:'10px' }}>
+        <div className="card" style={{borderRadius:'10px', marginTop:'15px'}}>
             <div className="card-header">
             </div>
             <div className="card-body">

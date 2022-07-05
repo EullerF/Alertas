@@ -4,7 +4,7 @@ import React  from 'react';
 import api from "../src/utils/api";
 import apiWork from "../src/utils/apiWork";
 import { useState , useEffect } from 'react';
-
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const App = () =>{
   const [counter,setCounter] = useState(0);
@@ -12,6 +12,10 @@ const App = () =>{
     alerta:'',
     status:false
 })
+const [submitLogin,setSubmitLogin] = useState({
+  status:false,
+  message:''
+});
 
   useEffect (() => {
     api
@@ -101,13 +105,32 @@ setTimeout(()=>{
         userAuth.auth = true
         console.log(userAuth)
         setCounter(counter + 1)
+        setSubmitLogin({
+          status:true,
+          message:response.data.user
+        })
+        delay(2)
 
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
-      alert('Usuário ou senha inválidos')
+      setSubmitLogin({
+        status:false,
+        message:'Usuário ou senha inválidos'
+      })
+      delay(3)
     });  
     }
+
+    function delay(n){
+      setTimeout(()=>{
+        setSubmitLogin({
+        status:false,
+        message:''
+        })
+        return
+      },n*1000)
+  }
 
 
 
@@ -129,6 +152,15 @@ setTimeout(()=>{
         <label>
             <div className="card-body">
                 <h5 className="card-title text-center" style={{color:'blue'}}>Login</h5>
+                {submitLogin.status===false && submitLogin.message!==''
+                  ?
+                  <Alert severity="warning" style={{marginTop:'5px',padding:'5px'}}>
+                  <AlertTitle>Login não realizado</AlertTitle>
+                  <strong>{submitLogin.message}</strong>
+                  </Alert>
+                  :
+                  <div></div>
+                }
             </div>
 
           <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
@@ -137,7 +169,6 @@ setTimeout(()=>{
           </div>
           <br/>
           <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              
               <input className="form-control" placeholder="Senha" name="password" type="password"  onChange={onChange}/>
           </div>
         </label>
@@ -161,20 +192,36 @@ setTimeout(()=>{
                 <div>
                 </div>
       }
+      {submitLogin.status===true && submitLogin.message!==''
+      ?
+      <Alert severity="success" style={{padding: '20px 80px 5px 80px', marginTop:'15px'}}>
+      <AlertTitle>Login realizado</AlertTitle>
+      Seja bem vindo <strong>{submitLogin.message}</strong>
+      </Alert>
+      :
       <CardAdmin></CardAdmin>
+      }
       </div>
       :
       <div>
       {envia.status===true
                 ?
-                <div style={{padding: '20px 80px 5px 80px'}}>
+                <div style={{padding: '20px 80px 5px 80px', marginTop:'15px'}}>
                     <p className="p-3 mb-2 bg-info text-white" style={{borderRadius:'10px'}}>Enviando: {envia.alerta}</p>
                 </div>
                 :
                 <div>
                 </div>
       }
+      {submitLogin.status===true && submitLogin.message!==''
+      ?
+      <Alert severity="success" style={{padding: '20px 80px 5px 80px'}}>
+      <AlertTitle>Login realizado</AlertTitle>
+      Seja bem vindo <strong>{submitLogin.message}</strong>
+      </Alert>
+      :
       <CardUser></CardUser>
+      }
       </div>
       }
       </div>

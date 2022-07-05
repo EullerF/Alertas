@@ -223,8 +223,8 @@ export default function List() {
                     textColor="primary"
                     centered
                     >
-                    <Tab label="Listar todas as publicações" />
-                    <Tab label="Lista"  />
+                    <Tab label="Listar todas as mensagens" />
+                    <Tab label="Listar mensagens ativas"  />
                     </TabsComponent>
                 </Paper>
                     <TabPanel value={value} index={0}>

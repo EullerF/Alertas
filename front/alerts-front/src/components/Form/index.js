@@ -2,12 +2,16 @@ import React from "react";
 import api from '../../utils/api';
 import { useState, useEffect } from 'react';
 import { MultiSelect } from "react-multi-select-component";
-
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const Form = () =>{
   const [groups, setGroups] = useState([])
   const [selectedG, setSelectedG] = useState([]);
-  const [counter,setCounter] = useState(0);
+  const [submit,setSubmit] = useState({
+    status:false,
+    message:''
+  });
+
   useEffect(()=>{
     api
                   .get("http://localhost:5000/groups/")
@@ -18,6 +22,7 @@ const Form = () =>{
                     console.error("ops! ocorreu um erro" + err);
                   }); 
   },[]);
+
   
   const alertInit = {
     alertDescription:'',
@@ -58,7 +63,10 @@ const Form = () =>{
       },
     })
     .then(function(response) {
-        alert('Cadastrado com Sucesso')
+        setSubmit({
+          status:true,
+          message:''
+        })
         setalertSubmit({
           alertDescription:'',
           group:[],
@@ -69,14 +77,50 @@ const Form = () =>{
           file:'', 
         })
         setSelectedG([])
+        delay(2)
     })
     .catch((err) => { 
-      //console.log(err.response.data);
-      alert('Atenção: '+err.response.data.message)
+      setSubmit({
+        status:false,
+        message:err.response.data.message
+      })
+      delay(3)
     });  
   }
 
+  function delay(n){
+    setTimeout(()=>{
+      setSubmit({
+      status:false,
+      message:''
+      })
+      return
+    },n*1000)
+}
+
+
     return (
+      <div style={{display: 'flex', flexDirection: 'column'}}>
+        {submit.status===false && submit.message!==''
+        ?
+        <Alert severity="warning">
+        <AlertTitle>Atenção</AlertTitle>
+        Mensagem não cadastrada: <strong>{submit.message}</strong>
+        </Alert>
+        :
+        <div></div>
+        }
+        {submit.status===true && submit.message===''
+        ?
+        <Alert severity="success">
+        <AlertTitle>Cadastrado</AlertTitle>
+          Mensagem agendada
+        </Alert>
+        :
+        <div></div>
+        }
+        
+        
       <form onSubmit={Cadastrar} enctype='multipart/form-data'  style={{display: 'flex', flexDirection: 'column'}}>
         <label>
          Descrição do Alerta:
@@ -164,6 +208,7 @@ const Form = () =>{
         <button type="submit" className="btn btn-success">Cadastrar Alerta</button>
         </div>
       </form>
+      </div>
     );
   }
 
