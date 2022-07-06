@@ -56,22 +56,13 @@ function CardUser () {
                     textColor="primary"
                     centered
                     >
-                    <Tab label="Cadastro de Mensages" />
-                    <Tab label="Lista" disabled />
-                    <Tab label="Cadastro de Grupos" disabled />
+                    <Tab label="Cadastro de Mensagens" />
                     </TabsComponent>
                 </Paper>
                     <TabPanel value={value} index={0}>
                         <div className="card-footer text-muted">
                         <Form></Form>
                         </div>
-                    </TabPanel>
-                    <TabPanel value={value} index={1}>
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
-                        <List></List>
-                        </div>
-                    </TabPanel>
-                    <TabPanel value={value} index={2}>
                     </TabPanel>
     </Fragment>  
         </div>

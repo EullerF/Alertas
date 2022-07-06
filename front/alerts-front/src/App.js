@@ -1,12 +1,13 @@
 import CardAdmin from "./components/CardAdmin";
 import CardUser from "./components/CardUser";
+import Signin from "./components/Signin";
 import React  from 'react';
 import api from "../src/utils/api";
 import apiWork from "../src/utils/apiWork";
 import { useState , useEffect } from 'react';
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-const App = () =>{
+export default function App (){
   const [counter,setCounter] = useState(0);
   const [envia, setEnvia] = useState({
     alerta:'',
@@ -148,6 +149,7 @@ setTimeout(()=>{
                 <div>
                 </div>
       }
+      
       <form onSubmit={Login} style={{display: 'flex', flexDirection: 'column', padding: '80px'}}>
         <label>
             <div className="card-body">
@@ -176,7 +178,7 @@ setTimeout(()=>{
         <div style={{display: 'flex', flexDirection:'column', padding: '10px 80px 10px 80px'}}>
         <button type="submit" className="btn btn-outline-primary">Login</button>
         </div>
-      </form>
+      </form> 
       </div>
       :
       <div>
@@ -199,7 +201,7 @@ setTimeout(()=>{
       Seja bem vindo <strong>{submitLogin.message}</strong>
       </Alert>
       :
-      <CardAdmin></CardAdmin>
+      <CardAdmin User={userAuth.user}/>
       }
       </div>
       :
@@ -229,4 +231,3 @@ setTimeout(()=>{
     </>
   )
 }
-export default App;

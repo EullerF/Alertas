@@ -37,7 +37,7 @@ TabPanel.propTypes = {
 
 
 
-function Group () {
+function Group ({attGroup}) {
   const [groups, setGroups] = useState([])
   const [value, setValue] = useState(0)
   const [counter, setCounter] = useState(0);
@@ -89,6 +89,7 @@ function Group () {
           value:'',
           label:''
         })
+        attGroup()
        delay(2)
     })
     .catch((err) => { 
@@ -105,6 +106,7 @@ function Group () {
     .delete("http://localhost:5000/groups/"+id+"")
     .then(function(response) {
         setCounter(counter + 1);
+        attGroup()
     })
     .catch((err) => {
       console.error("ops! ocorreu um erro" + err);
@@ -134,6 +136,7 @@ function Group () {
   })
 
     return (
+      
       <Fragment>
                 <Paper>
                     <TabsComponent
@@ -148,6 +151,12 @@ function Group () {
                     </TabsComponent>
                 </Paper>
                     <TabPanel value={value} index={0}>
+                    <Paper
+                      style={{
+                          width: '100%',
+                          marginTop:'3px',
+                          overflowX: 'auto'
+                      }}>
                         <div className="card-footer text-muted">
                         {submit.status===true && submit.message!==''
                           ?
@@ -184,19 +193,21 @@ function Group () {
                           </div> 
                       </form>
                         </div>
+                        </Paper>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                      {groups.length===0
-                      ?
-                      <div></div>
-                      :
-                        <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
-                        <Paper
+                    <Paper
                         style={{
                             width: '100%',
                             marginTop:'3px',
                             overflowX: 'auto'
                         }}>
+                      {groups.length===0
+                      ?
+                      <div></div>
+                      :
+                        <div style={{display: 'flex', flexDirection: 'column', alignItems:'center', padding: '20px 20px 20px 20px'}}>
+                        
                           <Table style={{minWidth:'600px', maxWidth:'1200px'}}>
                           <TableHead>
                               <TableRow>
@@ -210,10 +221,11 @@ function Group () {
                         }
                           </TableBody>
                           </Table>
-                          </Paper>
+                          
                         </div>
                         
                       }
+                      </Paper>
                     </TabPanel>
               </Fragment>
     );

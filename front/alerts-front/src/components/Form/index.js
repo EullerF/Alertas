@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { MultiSelect } from "react-multi-select-component";
 import { Alert, AlertTitle } from '@material-ui/lab';
 
-const Form = () =>{
+export default function Form ({Att}) {
   const [groups, setGroups] = useState([])
   const [selectedG, setSelectedG] = useState([]);
   const [submit,setSubmit] = useState({
@@ -21,7 +21,7 @@ const Form = () =>{
                   .catch((err) => {
                     console.error("ops! ocorreu um erro" + err);
                   }); 
-  },[]);
+  },[Att]);
 
   
   const alertInit = {
@@ -211,5 +211,3 @@ const Form = () =>{
       </div>
     );
   }
-
-export default Form;

@@ -34,8 +34,14 @@ TabPanel.propTypes = {
   index: PropTypes.number.isRequired
 }
 
-function CardAdmin () {
+function CardAdmin ({User}) {
   const [value, setValue] = useState(0)
+
+  const [newGroup, setNewGroup] = useState(0);
+  
+  const attGroup = () => {
+    setNewGroup(newGroup + 1);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue)
@@ -46,7 +52,7 @@ function CardAdmin () {
             <div className="card-header">
             </div>
             <div className="card-body">
-                <h5 className="card-title text-center">Alerts</h5>
+                <h5 className="card-title text-center">Alerts </h5>
             </div>
             <Fragment>
                 <Paper>
@@ -57,7 +63,7 @@ function CardAdmin () {
                     textColor="primary"
                     centered
                     >
-                    <Tab label="Cadastro de Mensages" />
+                    <Tab label="Cadastro de Mensagens" />
                     <Tab label="Lista"  />
                     <Tab label="Administrar Grupos" />
                     <Tab label="Cadastro de Usuários" />
@@ -65,7 +71,7 @@ function CardAdmin () {
                 </Paper>
                     <TabPanel value={value} index={0}>
                         <div className="card-footer text-muted">
-                        <Form></Form>
+                        <Form Att={newGroup}/>
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
@@ -75,12 +81,12 @@ function CardAdmin () {
                     </TabPanel>
                     <TabPanel value={value} index={2}>
                         <div className="card-footer text-muted">
-                        <Group></Group>
+                        <Group attGroup={attGroup}/>
                         </div>
                     </TabPanel>
                     <TabPanel value={value} index={3}>
                         <div className="card-footer text-muted">
-                        Cadastro de User
+                        Em construção
                         </div>
                     </TabPanel>
               </Fragment>
