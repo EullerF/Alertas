@@ -13,10 +13,6 @@ export default function App (){
     alerta:'',
     status:false
 })
-const [submitLogin,setSubmitLogin] = useState({
-  status:false,
-  message:''
-});
 
   useEffect (() => {
     api
@@ -79,61 +75,27 @@ setTimeout(()=>{
 
   const userInit = {
     user:'',
-    password:'',
     profile:'',
-    auth:false
+    auth:false,
+    message:''
   }
-    
-    const [userLogin, setuserLogin] = useState(userInit)
-    const [userAuth, setuserAuth] = useState(userInit);
+  const [userAuth, setuserAuth] = useState(userInit);
+ 
 
-    function onChange(event){
-      const {name , value} = event.target;
-      setuserLogin({...userLogin, [name]:value});
-
-    }
-  
-    function Login(event){
-      event.preventDefault(); 
-      
-      api.post("http://localhost:5000/users/",{
-      user:userLogin.user,
-      password:userLogin.password,
-    })
-    .then(function(response) { 
-        userAuth.user = response.data.user
-        userAuth.profile = response.data.profile
-        userAuth.auth = true
-        console.log(userAuth)
-        setCounter(counter + 1)
-        setSubmitLogin({
-          status:true,
-          message:response.data.user
-        })
-        delay(2)
-
-    })
-    .catch((err) => {
-      console.error("ops! ocorreu um erro" + err);
-      setSubmitLogin({
-        status:false,
-        message:'Usuário ou senha inválidos'
-      })
-      delay(3)
-    });  
-    }
-
-    function delay(n){
-      setTimeout(()=>{
-        setSubmitLogin({
-        status:false,
-        message:''
-        })
-        return
-      },n*1000)
+  const statusLogin = (user,profile,auth,message) => {
+    userAuth.user = user
+    userAuth.profile = profile
+    userAuth.auth = auth
+    userAuth.message = message
+    delay(3)
   }
 
-
+  function delay(n){
+    setTimeout(()=>{
+      setuserAuth({...userAuth, ['message']:''});
+      return
+    },n*1000)
+}
 
   return(
     <>
@@ -149,36 +111,7 @@ setTimeout(()=>{
                 <div>
                 </div>
       }
-      
-      <form onSubmit={Login} style={{display: 'flex', flexDirection: 'column', padding: '80px'}}>
-        <label>
-            <div className="card-body">
-                <h5 className="card-title text-center" style={{color:'blue'}}>Login</h5>
-                {submitLogin.status===false && submitLogin.message!==''
-                  ?
-                  <Alert severity="warning" style={{marginTop:'5px',padding:'5px'}}>
-                  <AlertTitle>Login não realizado</AlertTitle>
-                  <strong>{submitLogin.message}</strong>
-                  </Alert>
-                  :
-                  <div></div>
-                }
-            </div>
-
-          <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              
-              <input className="form-control" placeholder="Usuário" name="user" type="text"  onChange={onChange} />
-          </div>
-          <br/>
-          <div style={{display: 'flex', flexDirection: 'column', color:'blue'}}>
-              <input className="form-control" placeholder="Senha" name="password" type="password"  onChange={onChange}/>
-          </div>
-        </label>
-        <br />
-        <div style={{display: 'flex', flexDirection:'column', padding: '10px 80px 10px 80px'}}>
-        <button type="submit" className="btn btn-outline-primary">Login</button>
-        </div>
-      </form> 
+      <Signin statusLogin={statusLogin}/>
       </div>
       :
       <div>
@@ -194,11 +127,11 @@ setTimeout(()=>{
                 <div>
                 </div>
       }
-      {submitLogin.status===true && submitLogin.message!==''
+      {userAuth.auth===true && userAuth.message==='Auth'
       ?
       <Alert severity="success" style={{padding: '20px 80px 5px 80px', marginTop:'15px'}}>
       <AlertTitle>Login realizado</AlertTitle>
-      Seja bem vindo <strong>{submitLogin.message}</strong>
+      Seja bem vindo <strong>{userAuth.user}</strong>
       </Alert>
       :
       <CardAdmin User={userAuth.user}/>
@@ -215,11 +148,11 @@ setTimeout(()=>{
                 <div>
                 </div>
       }
-      {submitLogin.status===true && submitLogin.message!==''
+      {userAuth.auth===true && userAuth.message==='Auth'
       ?
-      <Alert severity="success" style={{padding: '20px 80px 5px 80px'}}>
+      <Alert severity="success" style={{padding: '20px 80px 5px 80px', marginTop:'15px'}}>
       <AlertTitle>Login realizado</AlertTitle>
-      Seja bem vindo <strong>{submitLogin.message}</strong>
+      Seja bem vindo <strong>{userAuth.user}</strong>
       </Alert>
       :
       <CardUser></CardUser>
